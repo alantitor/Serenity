@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEE"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="20dp"
+        android:background="#455A64">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="I/O設定"
+            android:textSize="22dp"
+            android:textColor="#FFF"
+            android:fontFamily="Roboto, sans-serif"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#FFF"
+                android:padding="20dp"
+                android:layout_marginBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="聲道數"
+                        android:fontFamily="Roboto, sans-serif"
+                        android:textSize="14dp"
+                        android:textColor="#6AB344"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:id="@+id/rg_channel_activity_io_setting">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_channel_one_activity_io_setting"
+                            android:text="單聲道"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:checked="true"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_channel_two_activity_io_setting"
+                            android:text="立體聲"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"/>
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="輸入音訊"
+                        android:fontFamily="Roboto, sans-serif"
+                        android:textSize="14dp"
+                        android:textColor="#6AB344"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:id="@+id/rg_input_activity_io_setting">
+
+                        <!-- value: 0 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_input_microphone_activity_io_setting"
+                            android:text="麥克風"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:checked="true"
+                            android:visibility="visible"/>
+
+                        <!-- value: 1 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_input_insidestream_activity_io_setting"
+                            android:text="內部音訊"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
+
+                        <!-- value: 2 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_input_datafile_activity_io_setting"
+                            android:text="data file"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
+
+                        <!-- value: 3 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_input_wmv_activity_io_setting"
+                            android:text="wmv"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="輸出音訊"
+                        android:fontFamily="Roboto, sans-serif"
+                        android:textSize="14dp"
+                        android:textColor="#6AB344"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:id="@+id/rg_output_activity_io_setting">
+
+                        <!-- value: 0 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_output_speaker_activity_io_setting"
+                            android:text="揚聲器"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:checked="true"
+                            android:visibility="visible"/>
+
+                        <!-- value: 1 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_output_datafile_activity_io_setting"
+                            android:text="data file"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
+
+                        <!-- value: 2 -->
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_output_wmv_activity_io_setting"
+                            android:text="存檔"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
