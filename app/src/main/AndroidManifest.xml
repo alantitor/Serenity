@@ -48,6 +48,7 @@
             android:name=".activities.BandSettingActivity"
             android:label="@string/title_activity_band_setting" >
         </activity>
+        <service android:name=".sound.SoundService" />
     </application>
 
 </manifest>
