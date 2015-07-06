@@ -1,6 +1,8 @@
 package ntou.cs.lab505.serenity.stream;
 
 
+import android.util.Log;
+
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.sound.soundgeneration.HarmonicsGeneration;
 import ntou.cs.lab505.serenity.sound.soundgeneration.PureToneGeneration;
@@ -26,7 +28,7 @@ public class SoundInputPool {
      * @param mode 0: microphone, 1: read from inside stream, 2: read from data file, 3: read from wmv file, 4: pure tone
      */
     public SoundInputPool(int sampleRate, int mode) {
-
+        Log.d("SoundInputPool", "in SoundInputPool. initial object.");
         this.sampleRate = sampleRate;
         this.mode = mode;
 

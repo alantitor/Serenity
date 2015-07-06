@@ -109,6 +109,7 @@ public class ServiceActivity extends Activity {
             controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
         } else {
             // start service.
+            soundService.serviceInitParams();
             soundService.serviceStart();
             controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
         }
