@@ -1,10 +1,7 @@
 package ntou.cs.lab505.serenity.stream;
 
 
-import android.util.Log;
-
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
-import ntou.cs.lab505.serenity.sound.soundgeneration.HarmonicsGeneration;
 import ntou.cs.lab505.serenity.sound.soundgeneration.PureToneGeneration;
 import ntou.cs.lab505.serenity.stream.device.Microphone;
 import ntou.cs.lab505.serenity.stream.device.ReadFile;
@@ -28,7 +25,7 @@ public class SoundInputPool {
      * @param mode 0: microphone, 1: read from inside stream, 2: read from data file, 3: read from wmv file, 4: pure tone
      */
     public SoundInputPool(int sampleRate, int mode) {
-        Log.d("SoundInputPool", "in SoundInputPool. initial object.");
+        //Log.d("SoundInputPool", "in SoundInputPool. initial object.");
         this.sampleRate = sampleRate;
         this.mode = mode;
 
@@ -49,6 +46,9 @@ public class SoundInputPool {
         }
     }
 
+    /**
+     * open object.
+     */
     public void open() {
         switch (mode) {
             case 0:
@@ -64,6 +64,9 @@ public class SoundInputPool {
         }
     }
 
+    /**
+     * close object.
+     */
     public void close() {
         switch (mode) {
             case 0:
@@ -81,11 +84,16 @@ public class SoundInputPool {
         }
     }
 
+    /**
+     * read sound data from object.
+     * @return
+     */
     public SoundVectorUnit read() {
 
         short[] soundVector = null;
         SoundVectorUnit soundUnit = null;
 
+        // get sound data.
         switch (mode) {
             case 0:
                 soundVector = pipeMicrophoneToVector();
@@ -102,7 +110,7 @@ public class SoundInputPool {
                 break;
         }
 
-
+        // check data state.
         if (soundVector != null && soundVector.length > 0) {
             soundUnit = new SoundVectorUnit(soundVector);
             return soundUnit;

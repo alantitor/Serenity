@@ -1,22 +1,21 @@
 package ntou.cs.lab505.serenity.sound;
 
+
 import android.app.Service;
 import android.content.Intent;
-import android.os.*;
+import android.os.Binder;
+import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
-import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
-import ntou.cs.lab505.serenity.stream.SoundInputPool;
-import ntou.cs.lab505.serenity.stream.SoundOutputPool;
-import ntou.cs.lab505.serenity.thread.SoundInputThread;
+import ntou.cs.lab505.serenity.thread.examThread;
 
 /**
  * Created by alan on 2015/7/3.
@@ -32,7 +31,6 @@ public class SoundService extends Service {
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
 
     // sound process threads object.
-
 
 
     public class SoundServiceBinder extends Binder {
@@ -91,36 +89,64 @@ public class SoundService extends Service {
         bandSettingAdapter.close();
     }
 
+    final Handler handler = new Handler();
+    Runnable runnable = new examThread();
+
     public void serviceStart() {
         Log.d("SoundService", "in serviceStart. success.");
         serviceState = true;
 
 
+        handler.post(runnable);
+
+
+
+        /*
         SoundInputPool soundInputPool = new SoundInputPool(8000, 0);
         soundInputPool.open();
         SoundOutputPool soundOutputPool = new SoundOutputPool(8000, 1, 2, 0);
         soundOutputPool.open();
 
+        FrequencyShift frequencyShift = new FrequencyShift(8000, 1, 1, 0, 0);
 
-        while (true) {
+        BandGain bandGain = new BandGain(8000, 200, 3000, 5, 5, 5);
+
+
+
+        while (serviceState) {
             //Log.d("SoundService", "debug: data: " + soundInputPool.read().getVectorLength());
-            long time1 = System.nanoTime();
-            SoundVectorUnit data = soundInputPool.read();
-            long time2 = System.nanoTime();
-            Log.d("SoundService", "debug: time1: " + (time2 - time1) / 1000000);
-            soundOutputPool.write(soundInputPool.read());
-            long time3 = System.nanoTime();
-            Log.d("SoundService", "debug: time2: " + (time3 - time2) / 1000000);
-        }
+            long timems0 = System.currentTimeMillis();
+            long time0 = System.nanoTime();
 
-        //soundInputPool.close();
-        //soundOutputPool.close();
+            SoundVectorUnit data = soundInputPool.read();
+            long timems1 = System.currentTimeMillis();
+            long time1 = System.nanoTime();
+            Log.d("SoundService", "debug: time1: " + (time1 - time0) / 1000000.0 + " " + (timems1 - timems0));
+
+            data = frequencyShift.process(data);
+            long timems2 = System.currentTimeMillis();
+            long time2 = System.nanoTime();
+            Log.d("SoundService", "debug: time2: " + (time2 - time1) / 1000000.0 + " " + (timems2 - timems1));
+
+            //data = bandGain.process(data);
+            long timems3 = System.currentTimeMillis();
+            long time3 = System.nanoTime();
+            Log.d("SoundService", "debug: time3: " + (time3 - time2) / 1000000.0 + " " + (timems3 - timems2));
+
+            soundOutputPool.write(data);
+            long timems4 = System.currentTimeMillis();
+            long time4 = System.nanoTime();
+            Log.d("SoundService", "debug: time4: " + (time4 - time0) / 1000000.0 + " " + (timems4 - timems0));
+            Log.d("SoundService", "debug: total time: " + (time4 - time0) / 1000000.0 + " " + (timems4 - timems0));
+        }
+        */
     }
 
     public void serviceStop() {
         Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
 
+        handler.removeCallbacksAndMessages(runnable);
 
     }
 
