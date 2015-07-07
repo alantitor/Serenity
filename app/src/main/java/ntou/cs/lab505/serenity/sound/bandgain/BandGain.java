@@ -42,7 +42,12 @@ public class BandGain {
         this.sampleRate = sampleRate;
         this.channelNumber = 1;
 
+        iirLeftList.add(new IIR(this.filterOrder, sampleRate, lowBand, highBand));
+        gain40L.add(mag2db(gain40));
+        gain60L.add(mag2db(gain60));
+        gain80L.add(mag2db(gain80));
 
+        filterBankNumberLeft = 1;
     }
 
     public BandGain(int sampleRate, ArrayList<BandGainSetUnit> bandGainSetUnits) {
@@ -135,7 +140,7 @@ public class BandGain {
         } else {
             outputUnit = new SoundVectorUnit(channelMix(soundBandListL), null);
         }
-        
+
         return outputUnit;
     }
 
