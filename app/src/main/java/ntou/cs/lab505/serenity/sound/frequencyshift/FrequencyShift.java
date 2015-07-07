@@ -59,12 +59,18 @@ public class FrequencyShift {
         soundtouch.setTempoChange(tempoChange);  // Changes the sound to play at faster or slower tempo than originally without affecting the sound pitch.
     }
 
+    /**
+     * shift sound frequency
+     * @param inputUnit
+     * @return
+     */
     public SoundVectorUnit process(SoundVectorUnit inputUnit) {
 
         // check input data state.
-        if (inputUnit == null && inputUnit.getVectorLength() == 0) {
+        if (inputUnit == null || inputUnit.getVectorLength() == 0) {
             return null;
         }
+
 
         // put sound data into SoundTouch Object.
         soundtouch.putSamples(inputUnit.getLeftChannel(), inputUnit.getLeftChannel().length);
@@ -75,15 +81,19 @@ public class FrequencyShift {
         // receive sound from SoundTouch object.
         short[] outputVector = soundtouch.receiveSamples();
         while ((temp = soundtouch.receiveSamples()).length > 0) {
-            temp2 = outputVector;
-            outputVector = new short[temp.length + temp2.length];
-            System.arraycopy(temp2, 0, outputVector, 0, temp2.length);
-            System.arraycopy(temp, 0, outputVector, temp2.length + 1, temp.length);
+            temp2 = outputVector;  // swap old data.
+            outputVector = new short[temp.length + temp2.length];  // extend array size.
+            System.arraycopy(temp2, 0, outputVector, 0, temp2.length);  // copy old data.
+            System.arraycopy(temp, 0, outputVector, temp2.length + 1, temp.length);  // copy new data.
         }
 
-        // make sound structure.
-        SoundVectorUnit outputUnit = new SoundVectorUnit(outputVector);
 
-        return outputUnit;
+        // make sound structure.
+        if (outputVector != null && outputVector.length > 0) {
+            SoundVectorUnit outputUnit = new SoundVectorUnit(outputVector);
+            return outputUnit;
+        } else {
+            return null;
+        }
     }
 }
