@@ -141,7 +141,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:visibility="visible"/>
+                            android:visibility="gone"/>
 
                         <!-- value: 2 -->
                         <RadioButton
@@ -153,7 +153,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:visibility="visible"/>
+                            android:visibility="gone"/>
 
                         <!-- value: 3 -->
                         <RadioButton
@@ -165,7 +165,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:visibility="visible"/>
+                            android:visibility="gone"/>
 
                     </RadioGroup>
 
@@ -222,7 +222,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:visibility="visible"/>
+                            android:visibility="gone"/>
 
                         <!-- value: 2 -->
                         <RadioButton
@@ -234,7 +234,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:visibility="visible"/>
+                            android:visibility="gone"/>
 
                     </RadioGroup>
 
