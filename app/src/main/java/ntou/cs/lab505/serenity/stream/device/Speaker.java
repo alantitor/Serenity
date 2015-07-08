@@ -68,7 +68,7 @@ public class Speaker {
         }
 
         audioTrack.write(dataVector, 0, dataVector.length);
-        //audioTrack.flush();  // is this code danger?
+        audioTrack.flush();  // is this code danger?
     }
 
     /**
