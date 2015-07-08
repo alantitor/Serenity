@@ -9,12 +9,15 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
+import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
+import ntou.cs.lab505.serenity.thread.SoundIOThread;
 import ntou.cs.lab505.serenity.thread.examThread;
 
 /**
@@ -89,16 +92,28 @@ public class SoundService extends Service {
         bandSettingAdapter.close();
     }
 
-    final Handler handler = new Handler();
-    Runnable runnable = new examThread();
+    //final Handler handler = new Handler();
+    //Runnable runnable = new examThread();
+
+    //SoundIOThread soundIOThread = new SoundIOThread();
+    private LinkedBlockingQueue<SoundVectorUnit> soundInputQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<SoundVectorUnit> soundOutputQueue = new LinkedBlockingQueue<>();
+
 
     public void serviceStart() {
         Log.d("SoundService", "in serviceStart. success.");
         serviceState = true;
+        //soundIOThread.setSoundInputQueue(soundInputQueue);
+        //soundIOThread.setSoundOutputQueue(soundOutputQueue);
 
 
-        handler.post(runnable);
 
+        //soundIOThread.threadStart();
+
+        //handler.post(runnable);
+        Thread thread = new SoundIOThread();
+        thread.setPriority(9);
+        thread.start();
 
 
         /*
@@ -146,8 +161,8 @@ public class SoundService extends Service {
         Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
 
-        handler.removeCallbacksAndMessages(runnable);
-
+        //handler.removeCallbacksAndMessages(runnable);
+        //soundIOThread.threadStop();
     }
 
     public boolean getServiceState() {
