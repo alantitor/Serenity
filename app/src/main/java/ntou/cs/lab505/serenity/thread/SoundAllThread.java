@@ -49,32 +49,40 @@ public class SoundAllThread extends Thread {
 
         while(threadState) {
             long timeStartMs = System.currentTimeMillis();
-            long timeStartNs = System.nanoTime();
+            double timeStartNs = System.nanoTime() / 1000000.0;
             //this.setPriority(MAX_PRIORITY);
 
 
             // read sound data from microphone.
             dataUnit = soundInputPool.read();
+
             long timeMs1 = System.currentTimeMillis();
-            long timeNs1 = System.nanoTime();
+            double timeNs1 = System.nanoTime() / 1000000.0;
+
+            // shift sound frequency.
             dataUnit = frequencyShift.process(dataUnit);
+
             long timeMs2 = System.currentTimeMillis();
-            long timeNs2 = System.nanoTime();
+            double timeNs2 = System.nanoTime() / 1000000.0;
+
+            // cut bands and gain db.
             dataUnit = bandGain.process(dataUnit);
+
             long timeMs3 = System.currentTimeMillis();
-            long timeNs3 = System.nanoTime();
+            double timeNs3 = System.nanoTime() / 1000000.0;
+
             // output sound data to speaker.
             soundOutputPool.write(dataUnit);
 
 
             // record information.
             long timeStopMs = System.currentTimeMillis();
-            long timeStopNs = System.nanoTime();
+            double timeStopNs = System.nanoTime() / 1000000;
             Log.d("SoundAllThread", "in run. exclude time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
-            Log.d("SoundAllThread", "in run. module time: " + (timeNs1 - timeStartNs) + " " + (timeMs1 - timeStartMs) + " "
-                                                            + (timeNs2 - timeNs1) + " " + (timeMs2 - timeMs1) + " "
-                                                            + (timeNs3 - timeNs2) + " " + (timeMs3 - timeMs2) + " "
-                                                            + (timeStopNs - timeNs3) + " " + (timeStopMs - timeMs3) + " ");
+            Log.d("SoundAllThread", "in run. module time: " + "(" + (timeNs1 - timeStartNs) + " " + (timeMs1 - timeStartMs) + ") "
+                                                            + "(" + (timeNs2 - timeNs1) + " " + (timeMs2 - timeMs1) + ") "
+                                                            + "(" +  (timeNs3 - timeNs2) + " " + (timeMs3 - timeMs2) + ") "
+                                                            + "(" +  (timeStopNs - timeNs3) + " " + (timeStopMs - timeMs3) + ")");
             //Log.d("SoundAllThread", "in run. priority: " + this.getPriority());
         }
 
