@@ -54,15 +54,15 @@ public class SoundIOThread extends Thread {
 
     public void run() {
         Log.d("SoundIOThread", "in run. thread start.");
-        Log.d("SoundIOThread", "in run. thread start priority: " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
+        SoundVectorUnit dataUnit = null;
 
-        SoundVectorUnit dataUnit;
 
         while (threadState) {
-            //this.setPriority(5);
-            Log.d("SoundIOThread", "in run. thread priority: " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
+            long timeStartMs = System.currentTimeMillis();
+            long timeStartNs = System.nanoTime();
+            //this.setPriority(MAX_PRIORITY);
 
-            /*
+
             // read sound data from microphone.
             dataUnit = soundInputPool.read();
 
@@ -71,15 +71,23 @@ public class SoundIOThread extends Thread {
                 soundOutputQueue.add(dataUnit);
             }
 
+            Log.d("SoundIOThread", "in run. queue size: " + soundInputQueue.size() + " " + soundOutputQueue.size());
 
             // output sound data to speaker.
-            dataUnit = null;
+            //dataUnit = null;
             while (soundInputQueue.size() > 0) {
                 dataUnit = soundInputQueue.poll();
                 soundOutputPool.write(dataUnit);
             }
-            */
+
+
+            // record information.
+            long timeStopMs = System.currentTimeMillis();
+            long timeStopNs = System.nanoTime();
+            Log.d("SoundIOThread", "in run. time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
+            Log.d("SoundIOThread", "in run. priority: " + this.getPriority());
         }
+
 
         Log.d("SoundIOThread", "in run. thread stop.");
     }
