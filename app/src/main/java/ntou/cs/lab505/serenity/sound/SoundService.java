@@ -90,30 +90,36 @@ public class SoundService extends Service {
         bandSettingAdapter.open();
         bandGainSetUnitArrayList = bandSettingAdapter.getData();
         bandSettingAdapter.close();
+
+
     }
 
-    //final Handler handler = new Handler();
-    //Runnable runnable = new examThread();
-
-    //SoundIOThread soundIOThread = new SoundIOThread();
+    SoundIOThread soundIOThread;
     private LinkedBlockingQueue<SoundVectorUnit> soundInputQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<SoundVectorUnit> soundOutputQueue = new LinkedBlockingQueue<>();
-
 
     public void serviceStart() {
         Log.d("SoundService", "in serviceStart. success.");
         serviceState = true;
-        //soundIOThread.setSoundInputQueue(soundInputQueue);
-        //soundIOThread.setSoundOutputQueue(soundOutputQueue);
+
+        soundIOThread = new SoundIOThread();
+        soundIOThread.setSoundInputQueue(soundInputQueue);
+        soundIOThread.setSoundOutputQueue(soundInputQueue);
+        soundIOThread.setPriority(Thread.MAX_PRIORITY);
+        soundIOThread.threadStart();
 
 
-
-        //soundIOThread.threadStart();
-
-        //handler.post(runnable);
-        Thread thread = new SoundIOThread();
-        thread.setPriority(9);
-        thread.start();
+        /*
+        while (true) {
+            //soundIOThread.setPriority(Thread.MAX_PRIORITY);
+            Log.d("SoundService", "thread priority: " + soundIOThread.getPriority());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        */
 
 
         /*
@@ -161,8 +167,8 @@ public class SoundService extends Service {
         Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
 
-        //handler.removeCallbacksAndMessages(runnable);
-        //soundIOThread.threadStop();
+        soundIOThread.threadStop();
+
     }
 
     public boolean getServiceState() {
