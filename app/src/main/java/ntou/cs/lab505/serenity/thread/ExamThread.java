@@ -11,7 +11,7 @@ import ntou.cs.lab505.serenity.stream.SoundOutputPool;
 /**
  * Created by alan on 7/7/15.
  */
-public class examThread implements Runnable {
+public class ExamThread implements Runnable {
 
     private boolean threadState = false;
 

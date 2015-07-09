@@ -26,6 +26,11 @@ public class SoundIOThread extends Thread {
         soundOutputPool = new SoundOutputPool(8000, 1, 2, 0);
     }
 
+    public SoundIOThread(int sampleRate, int soundInMode, int soundOutChannelNumber, int soundOutLR, int SoundOutMode) {
+        soundInputPool = new SoundInputPool(sampleRate, soundInMode);
+        soundOutputPool = new SoundOutputPool(sampleRate, soundOutChannelNumber, soundOutLR, SoundOutMode);
+    }
+
     public void setSoundInputQueue(LinkedBlockingQueue<SoundVectorUnit> soundInputQueue) {
         this.soundInputQueue = soundInputQueue;
     }
@@ -65,13 +70,13 @@ public class SoundIOThread extends Thread {
 
             // read sound data from microphone.
             dataUnit = soundInputPool.read();
-
+/*
             // pipe data to output queue.
             if (dataUnit != null && dataUnit.getVectorLength() > 0) {
                 soundOutputQueue.add(dataUnit);
             }
 
-            Log.d("SoundIOThread", "in run. queue size: " + soundInputQueue.size() + " " + soundOutputQueue.size());
+            //Log.d("SoundIOThread", "in run. queue size: " + soundInputQueue.size() + " " + soundOutputQueue.size());
 
             // output sound data to speaker.
             //dataUnit = null;
@@ -79,7 +84,7 @@ public class SoundIOThread extends Thread {
                 dataUnit = soundInputQueue.poll();
                 soundOutputPool.write(dataUnit);
             }
-
+            */
 
             // record information.
             long timeStopMs = System.currentTimeMillis();

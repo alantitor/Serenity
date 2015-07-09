@@ -17,8 +17,9 @@ import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
+import ntou.cs.lab505.serenity.thread.SoundAllThread;
 import ntou.cs.lab505.serenity.thread.SoundIOThread;
-import ntou.cs.lab505.serenity.thread.examThread;
+import ntou.cs.lab505.serenity.thread.SoundProcessThread;
 
 /**
  * Created by alan on 2015/7/3.
@@ -94,19 +95,36 @@ public class SoundService extends Service {
 
     }
 
-    SoundIOThread soundIOThread;
-    private LinkedBlockingQueue<SoundVectorUnit> soundInputQueue = new LinkedBlockingQueue<>();
-    private LinkedBlockingQueue<SoundVectorUnit> soundOutputQueue = new LinkedBlockingQueue<>();
+    //SoundIOThread soundIOThread;
+    //SoundProcessThread soundProcessThread;
+    //private LinkedBlockingQueue<SoundVectorUnit> soundQueue1 = new LinkedBlockingQueue<>();
+    //private LinkedBlockingQueue<SoundVectorUnit> soundQueue2 = new LinkedBlockingQueue<>();
+
+    SoundAllThread soundAllThread;
 
     public void serviceStart() {
         Log.d("SoundService", "in serviceStart. success.");
         serviceState = true;
 
-        soundIOThread = new SoundIOThread();
-        soundIOThread.setSoundInputQueue(soundInputQueue);
-        soundIOThread.setSoundOutputQueue(soundInputQueue);
-        soundIOThread.setPriority(Thread.MAX_PRIORITY);
-        soundIOThread.threadStart();
+        soundAllThread = new SoundAllThread();
+        soundAllThread.setPriority(Thread.MAX_PRIORITY);
+        soundAllThread.threadStart();
+
+        //soundProcessThread = new SoundProcessThread();
+        //soundProcessThread.setSoundInputQueue(soundQueue1);
+        //soundProcessThread.setSoundOutputQueue(soundQueue2);
+        //soundProcessThread.setPriority(Thread.MIN_PRIORITY);
+        //soundProcessThread.threadStart();
+
+
+
+
+        //soundIOThread = new SoundIOThread();
+        //soundIOThread.setSoundInputQueue(soundQueue1);
+        //soundIOThread.setSoundOutputQueue(soundQueue2);
+        //soundIOThread.setPriority(Thread.MAX_PRIORITY);
+        //soundIOThread.threadStart();
+
 
 
         /*
@@ -166,9 +184,11 @@ public class SoundService extends Service {
     public void serviceStop() {
         Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
-
-        soundIOThread.threadStop();
-
+        soundAllThread.threadStop();
+        //soundIOThread.threadStop();
+        //soundIOThread = null;
+        //soundProcessThread.threadStop();
+        //soundProcessThread = null;
     }
 
     public boolean getServiceState() {
