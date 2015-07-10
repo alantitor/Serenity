@@ -1,6 +1,7 @@
 package ntou.cs.lab505.serenity.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -36,10 +37,13 @@ public class BandSettingActivity extends Activity {
 
         LinearLayout rightControlLayout = (LinearLayout) findViewById(R.id.control_right_activity_band_setting);
         TextView leftControlTV = (TextView) findViewById(R.id.controltitle_left_activity_band_setting);
-
+        // left channel border.
         SeekBar leftSeekbar = (SeekBar) findViewById(R.id.seekbar_left_activity_band_setting);
+        // right channel border.
         SeekBar rightSeekBar = (SeekBar) findViewById(R.id.seekbar_right_activity_band_setting);
 
+
+        // left channel listener
         leftSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -67,6 +71,7 @@ public class BandSettingActivity extends Activity {
             }
         });
 
+        // right channel listener.
         rightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -102,6 +107,7 @@ public class BandSettingActivity extends Activity {
         //Log.d("BandSettingActivity", "in onCreate. channel number: " + this.channelNumber);
         ioSettingAdapter.close();
 
+        // if channel is one, invisible right channel border.
         if (this.channelNumber == 1) {
             leftControlTV.setText("聲道");
             rightControlLayout.setVisibility(View.GONE);
@@ -123,7 +129,6 @@ public class BandSettingActivity extends Activity {
      */
     @Override
     public void onPause() {
-        super.onPause();
 
         LinearLayout leftRootLayout = (LinearLayout) findViewById(R.id.drawarea_left_activity_band_setting);
         LinearLayout rightRootLayout = (LinearLayout) findViewById(R.id.drawarea_right_activity_band_setting);
@@ -154,6 +159,30 @@ public class BandSettingActivity extends Activity {
             gain40 = (EditText) v.findViewById(R.id.gain40_view_bandgain);
             gain60 = (EditText) v.findViewById(R.id.gain60_view_bandgain);
             gain80 = (EditText) v.findViewById(R.id.gain80_view_bandgain);
+
+            // check data state.
+            // delete empty bands.
+            if (lowBand.getText().toString().matches("") && highBand.getText().toString().matches("")
+                    && gain40.getText().toString().matches("") && gain60.getText().toString().matches("") && gain80.getText().toString().matches("")) {
+                continue;
+            }
+            // insert default value.
+            if (lowBand.getText().toString().matches("")) {
+                lowBand.setText("200");
+            }
+            if (highBand.getText().toString().matches("")) {
+                highBand.setText("3999");
+            }
+            if (gain40.getText().toString().matches("")) {
+                gain40.setText("0");
+            }
+            if (gain60.getText().toString().matches("")) {
+                gain60.setText("0");
+            }
+            if (gain80.getText().toString().matches("")) {
+                gain80.setText("0");
+            }
+
             //Log.d("BandSettingActivity", "in onPause. lowBand: " + lowBand.getText().toString());
             //Log.d("BandSettingActivity", "in onPause. highBand: " + highBand.getText().toString());
             //Log.d("BandSettingActivity", "in onPause. gain40: " + gain40.getText().toString());
@@ -183,6 +212,29 @@ public class BandSettingActivity extends Activity {
                 gain60 = (EditText) v.findViewById(R.id.gain60_view_bandgain);
                 gain80 = (EditText) v.findViewById(R.id.gain80_view_bandgain);
 
+                // check data state.
+                // delete empty bands.
+                if (lowBand.getText().toString().matches("") && highBand.getText().toString().matches("")
+                        && gain40.getText().toString().matches("") && gain60.getText().toString().matches("") && gain80.getText().toString().matches("")) {
+                    continue;
+                }
+                // insert default value.
+                if (lowBand.getText().toString().matches("")) {
+                    lowBand.setText("200");
+                }
+                if (highBand.getText().toString().matches("")) {
+                    highBand.setText("3999");
+                }
+                if (gain40.getText().toString().matches("")) {
+                    gain40.setText("0");
+                }
+                if (gain60.getText().toString().matches("")) {
+                    gain60.setText("0");
+                }
+                if (gain80.getText().toString().matches("")) {
+                    gain80.setText("0");
+                }
+
                 // generate object to save values.
                 bandGainSetUnit = new  BandGainSetUnit(1,
                         Integer.parseInt(lowBand.getText().toString()),
@@ -196,9 +248,10 @@ public class BandSettingActivity extends Activity {
 
         // save data to database.
         bandSettingAdapter.saveData(bandGainSetUnitArrayList);
-        //Log.d("BandSettingActivity", "in onPuase. size: " + bandGainSetUnitArrayList.size());
         // close database
         bandSettingAdapter.close();
+
+        super.onPause();
     }
 
     private void loadData() {
@@ -279,5 +332,16 @@ public class BandSettingActivity extends Activity {
                 Log.d("BandSettingActivity", "in onResume. wrong data in database.");
             }
         }
+    }
+
+    private void alertDialog(String tt) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        TextView message = new TextView(this);
+        message.setText("參數" + tt + "未設定");
+        //message.setGravity(Gravity.CENTER);
+        builder.setView(message);
+        builder.setPositiveButton("OK", null);
+        AlertDialog dialong = builder.show();
+        dialong.show();
     }
 }
