@@ -2,6 +2,10 @@ package ntou.cs.lab505.serenity.thread;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
+import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
+import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.sound.bandgain.BandGain;
 import ntou.cs.lab505.serenity.sound.frequencyshift.FrequencyShift;
@@ -28,6 +32,13 @@ public class SoundAllThread extends Thread {
         soundOutputPool = new SoundOutputPool(8000, 1, 2, 0);
     }
 
+    public SoundAllThread(int sampleRate, IOSetUnit ioSetUnit, int semiValue, ArrayList<BandGainSetUnit> bandGainSetUnits) {
+        soundInputPool = new SoundInputPool(sampleRate, ioSetUnit.getInputType());
+        frequencyShift = new FrequencyShift(sampleRate, ioSetUnit.getChannelNumber(), semiValue, 0, 0);
+        bandGain = new BandGain(sampleRate, bandGainSetUnits);
+        soundOutputPool = new SoundOutputPool(sampleRate, ioSetUnit.getChannelNumber(), 2, ioSetUnit.getOutputType());
+    }
+
     public void threadStart(){
         soundInputPool.open();
         soundOutputPool.open();
@@ -48,10 +59,12 @@ public class SoundAllThread extends Thread {
 
 
         while(threadState) {
+            //this.setPriority(MAX_PRIORITY);
+            //android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+            //Log.d("SoundAllThread", "in run. priority: " + this.getPriority());
+
             long timeStartMs = System.currentTimeMillis();
             double timeStartNs = System.nanoTime() / 1000000.0;
-            //this.setPriority(MAX_PRIORITY);
-
 
             // read sound data from microphone.
             dataUnit = soundInputPool.read();
@@ -78,12 +91,13 @@ public class SoundAllThread extends Thread {
             // record information.
             long timeStopMs = System.currentTimeMillis();
             double timeStopNs = System.nanoTime() / 1000000;
+
             Log.d("SoundAllThread", "in run. exclude time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
+
             Log.d("SoundAllThread", "in run. module time: " + "(" + (timeNs1 - timeStartNs) + " " + (timeMs1 - timeStartMs) + ") "
                                                             + "(" + (timeNs2 - timeNs1) + " " + (timeMs2 - timeMs1) + ") "
                                                             + "(" +  (timeNs3 - timeNs2) + " " + (timeMs3 - timeMs2) + ") "
                                                             + "(" +  (timeStopNs - timeNs3) + " " + (timeStopMs - timeMs3) + ")");
-            //Log.d("SoundAllThread", "in run. priority: " + this.getPriority());
         }
 
         Log.d("SoundAllThread", "in run. thread stop.");
