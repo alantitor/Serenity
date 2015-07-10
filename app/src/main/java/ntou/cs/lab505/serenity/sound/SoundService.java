@@ -29,7 +29,7 @@ public class SoundService extends Service {
     // service state.
     private boolean serviceState = false;
     // read data from database.
-    int sampleRate = 8000;
+    int sampleRate = 16000;
     IOSetUnit ioSetUnit;
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
