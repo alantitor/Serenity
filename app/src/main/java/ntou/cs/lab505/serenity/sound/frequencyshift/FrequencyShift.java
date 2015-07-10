@@ -76,6 +76,7 @@ public class FrequencyShift {
         soundtouch.putSamples(inputUnit.getLeftChannel(), inputUnit.getLeftChannel().length);
 
 
+        // temp variables.
         short[] temp, temp2;
 
         // receive sound from SoundTouch object.
@@ -90,8 +91,7 @@ public class FrequencyShift {
 
         // make sound structure.
         if (outputVector != null && outputVector.length > 0) {
-            SoundVectorUnit outputUnit = new SoundVectorUnit(outputVector);
-            return outputUnit;
+            return new SoundVectorUnit(outputVector);
         } else {
             return null;
         }
