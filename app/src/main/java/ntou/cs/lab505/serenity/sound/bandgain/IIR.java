@@ -1,6 +1,5 @@
 package ntou.cs.lab505.serenity.sound.bandgain;
 
-
 /*
  * IIR 濾波器
  * 此部分不用修改
@@ -25,9 +24,8 @@ public class IIR {
 
     private double[] Num;
     private double[] DenC;
-    /*
-     * 預設濾波器參數
-     */
+
+    // 預設濾波器參數
     private double[] band1_143_180_b   = {1.0e-003 * 0.1432, 0, 1.0e-003 * -0.4297, 0, 1.0e-003 * 0.4297, 0, 1.0e-003 * -0.1432};
     private double[] band1_143_180_a   = {-5.7117, 13.6650, -17.5272, 12.7116, -4.9426, 0.8050};
     private double[] band2_281_561_b   = {0.0011, 0, -0.0032, 0, 0.0032, 0, -0.0011};
@@ -41,6 +39,7 @@ public class IIR {
 
     private double[] band_coefficient_a;
     private double[] band_coefficient_b;
+
 
     public IIR(int band)
     {
@@ -67,13 +66,15 @@ public class IIR {
                 band_coefficient_b = band5_2230_3540_b.clone();
                 break;
         }
-        x = new double[band_coefficient_b.length-1];
+
+        x = new double[band_coefficient_b.length - 1];
         y = new double[band_coefficient_a.length];
     }
 
     public IIR(int FilterOrder, int sampleRate, double Lcutoff, double Ucutoff)
     {
-        Log.d("DEBUG", "IIR Filter" + Lcutoff + "to" + Ucutoff);
+        Log.d("IIR", "in IIR. IIR filter range: " + Lcutoff + " to " + Ucutoff);
+
         this.n = FilterOrder;
         Lcutoff = Lcutoff / (sampleRate / 2);
         Ucutoff = Ucutoff / (sampleRate / 2);
@@ -85,39 +86,43 @@ public class IIR {
         band_coefficient_b = Num;
         band_coefficient_a = getDen();
 
-        Log.d("DEBUG", "a=");
+        Log.d("IIR", "in IIR. parameter a: ");
         for(int i=0;i<band_coefficient_a.length;i++) {
-            Log.d("DEBUG", Double.toString(band_coefficient_a[i]));
+            Log.d("IIR", "in IIR. parameter a = " + Double.toString(band_coefficient_a[i]));
         }
 
-        Log.d("DEBUG", "b=");
+        Log.d("IIR", "in IIR. parameter b: ");
         for(int i=0;i<2*FilterOrder+1;i++) {
-            Log.d("DEBUG", Double.toString(band_coefficient_b[i]));
+            Log.d("IIR", "in IIR. parameter b = " + Double.toString(band_coefficient_b[i]));
         }
-        //System.out.println(band_coefficient_b[i]);
+
         x = new double[band_coefficient_b.length-1];
         y = new double[band_coefficient_a.length];
     }
 
     double[] ComputeLP(int FilterOrder)
     {
-        double[] NumCoeffs= null;
+        double[] NumCoeffs = null;
         int m;
         int i;
 
-        NumCoeffs = new double[FilterOrder+1];
-        if( NumCoeffs == null ) return( null );
+        NumCoeffs = new double[FilterOrder + 1];
+        if ( NumCoeffs == null ) {
+            return ( null );
+        }
 
         NumCoeffs[0] = 1;
         NumCoeffs[1] = FilterOrder;
-        m = FilterOrder/2;
-        for( i=2; i <= m; ++i)
-        {
-            NumCoeffs[i] =(double) (FilterOrder-i+1)*NumCoeffs[i-1]/i;
-            NumCoeffs[FilterOrder-i]= NumCoeffs[i];
+        m = FilterOrder / 2;
+
+        for (i = 2; i <= m; ++i) {
+            NumCoeffs[i] = (double) (FilterOrder - i + 1) * NumCoeffs[i - 1] / i;
+            NumCoeffs[FilterOrder - i] = NumCoeffs[i];
         }
-        NumCoeffs[FilterOrder-1] = FilterOrder;
+
+        NumCoeffs[FilterOrder - 1] = FilterOrder;
         NumCoeffs[FilterOrder] = 1;
+
         return NumCoeffs;
     }
 
@@ -125,12 +130,16 @@ public class IIR {
     {
         double[] NumCoeffs;
 
-
         NumCoeffs = ComputeLP(FilterOrder);
-        if(NumCoeffs == null ) return( null );
+        if (NumCoeffs == null ) {
+            return ( null );
+        }
 
-        for(int i = 0; i <= FilterOrder; ++i)
-            if( i % 2 == 1 ) NumCoeffs[i] = -NumCoeffs[i];
+        for (int i = 0; i <= FilterOrder; ++i) {
+            if (i % 2 == 1) {
+                NumCoeffs[i] = -NumCoeffs[i];
+            }
+        }
 
         return NumCoeffs;
     }
@@ -148,23 +157,26 @@ public class IIR {
         RetVal[0] = b[0];
         RetVal[1] = b[1];
 
-        for( i = 1; i < FilterOrder; ++i )
-        {
-            RetVal[2*(2*i+1)]   += c[2*i] * RetVal[2*(2*i-1)]   - c[2*i+1] * RetVal[2*(2*i-1)+1];
-            RetVal[2*(2*i+1)+1] += c[2*i] * RetVal[2*(2*i-1)+1] + c[2*i+1] * RetVal[2*(2*i-1)];
+        for ( i = 1; i < FilterOrder; ++i ) {
+            RetVal[2 * (2 * i + 1)]   += c[2 * i] * RetVal[2 * (2 * i - 1)]   - c[2 * i + 1] * RetVal[2 * (2 * i - 1) + 1];
+            RetVal[2 * (2 * i + 1) + 1] += c[2 * i] * RetVal[2 * (2 * i - 1) + 1] + c[2 * i + 1] * RetVal[2 * (2 * i - 1)];
 
-            for( j = 2*i; j > 1; --j )
-            {
-                RetVal[2*j]   += b[2*i] * RetVal[2*(j-1)]   - b[2*i+1] * RetVal[2*(j-1)+1] +
-                        c[2*i] * RetVal[2*(j-2)]   - c[2*i+1] * RetVal[2*(j-2)+1];
-                RetVal[2*j+1] += b[2*i] * RetVal[2*(j-1)+1] + b[2*i+1] * RetVal[2*(j-1)] +
-                        c[2*i] * RetVal[2*(j-2)+1] + c[2*i+1] * RetVal[2*(j-2)];
+            for (j = 2 * i; j > 1; --j) {
+                RetVal[2 * j] += b[2 * i] * RetVal[2 * (j - 1)]
+                                    - b[2 * i + 1] * RetVal[2 * (j - 1) + 1]
+                                    + c[2 * i] * RetVal[2 * (j - 2)]
+                                    - c[2 * i + 1] * RetVal[2 * (j - 2) + 1];
+
+                RetVal[2 * j + 1] += b[2 * i] * RetVal[2 * (j - 1) + 1]
+                                        + b[2 * i + 1] * RetVal[2 * (j - 1)]
+                                        + c[2 * i] * RetVal[2 * (j - 2) + 1]
+                                        + c[2 * i + 1] * RetVal[2 * (j - 2)];
             }
 
-            RetVal[2] += b[2*i] * RetVal[0] - b[2*i+1] * RetVal[1] + c[2*i];
-            RetVal[3] += b[2*i] * RetVal[1] + b[2*i+1] * RetVal[0] + c[2*i+1];
-            RetVal[0] += b[2*i];
-            RetVal[1] += b[2*i+1];
+            RetVal[2] += b[2 * i] * RetVal[0] - b[2 * i + 1] * RetVal[1] + c[2 * i];
+            RetVal[3] += b[2 * i] * RetVal[1] + b[2 * i + 1] * RetVal[0] + c[2 * i + 1];
+            RetVal[0] += b[2 * i];
+            RetVal[1] += b[2 * i + 1];
         }
 
         return RetVal;
@@ -174,35 +186,44 @@ public class IIR {
     {
         double[] TCoeffs;
         double[] NumCoeffs;
-        //std::complex<double> *NormalizedKernel;
+
         Complex[] NormalizedKernel;
-        //double Numbers[11]={0,1,2,3,4,5,6,7,8,9,10};
-        double[] Numbers = new double[2*FilterOrder+1];
-        for(int k=0;k<2*FilterOrder+1;k++)
+
+        double[] Numbers = new double[2 * FilterOrder + 1];
+
+
+        for (int k = 0; k < 2 * FilterOrder + 1; k++)
         {
             Numbers[k] = k;
         }
         int i;
 
-        NumCoeffs = new double[2*FilterOrder+1];
-        if( NumCoeffs == null ) return( null );
+        NumCoeffs = new double[2 * FilterOrder + 1];
+        if ( NumCoeffs == null ) {
+            return( null );
+        }
 
-        NormalizedKernel = new Complex[2*FilterOrder+1];
-        if( NormalizedKernel == null ) return( null );
+        NormalizedKernel = new Complex[2 * FilterOrder + 1];
+        if ( NormalizedKernel == null ) {
+            return( null );
+        }
 
         TCoeffs = ComputeHP(FilterOrder);
-        if( TCoeffs == null ) return( null );
+        if ( TCoeffs == null ) {
+            return( null );
+        }
 
         for( i = 0; i < FilterOrder; ++i)
         {
-            NumCoeffs[2*i] = TCoeffs[i];
-            NumCoeffs[2*i+1] = 0.0;
+            NumCoeffs[2 * i] = TCoeffs[i];
+            NumCoeffs[2 * i + 1] = 0.0;
         }
-        NumCoeffs[2*FilterOrder] = TCoeffs[FilterOrder];
+
+        NumCoeffs[2 * FilterOrder] = TCoeffs[FilterOrder];
         double[] cp = new double[2];
         double Bw, Wn;
-        cp[0] = 2*2.0*Math.tan(PI * Lcutoff/ 2.0);
-        cp[1] = 2*2.0*Math.tan(PI * Ucutoff / 2.0);
+        cp[0] = 2 * 2.0 * Math.tan(PI * Lcutoff / 2.0);
+        cp[1] = 2 * 2.0 * Math.tan(PI * Ucutoff / 2.0);
 
         Bw = cp[1] - cp[0];
         //center frequency
@@ -211,20 +232,23 @@ public class IIR {
         //double kern;
         final Complex result = new Complex(-1,0);
 
-        for(int k = 0; k<2*FilterOrder+1; k++)
+        for(int k = 0; k < 2 * FilterOrder + 1; k++)
         {
-            NormalizedKernel[k] =((result.sqrt().times(-1)).times(Wn).times(Numbers[k])).exp();
+            NormalizedKernel[k] = ((result.sqrt().times(-1)).times(Wn).times(Numbers[k])).exp();
         }
+
         double b=0;
         double den=0;
-        for(int d = 0; d<2*FilterOrder+1; d++)
+
+        for(int d = 0; d < 2 * FilterOrder + 1; d++)
         {
-            b+=(NormalizedKernel[d].times(NumCoeffs[d])).re();
-            den+=(NormalizedKernel[d].times(DenC[d])).re();
+            b += (NormalizedKernel[d].times(NumCoeffs[d])).re();
+            den += (NormalizedKernel[d].times(DenC[d])).re();
         }
-        for(int c = 0; c<2*FilterOrder+1; c++)
+
+        for(int c = 0; c < 2 * FilterOrder + 1; c++)
         {
-            NumCoeffs[c]=(NumCoeffs[c]*den)/b;
+            NumCoeffs[c] = (NumCoeffs[c] * den) / b;
         }
 
         return NumCoeffs;
@@ -251,31 +275,32 @@ public class IIR {
         theta = PI * (Ucutoff - Lcutoff) / 2.0;
         st = Math.sin(theta);
         ct = Math.cos(theta);
-        s2t = 2.0*st*ct;        // sine of 2*theta
-        c2t = 2.0*ct*ct - 1.0;  // cosine of 2*theta
+        s2t = 2.0 * st * ct;        // sine of 2*theta
+        c2t = 2.0 * ct * ct - 1.0;  // cosine of 2*theta
 
         RCoeffs = new double[2 * FilterOrder];
         TCoeffs = new double[2 * FilterOrder];
 
         for( k = 0; k < FilterOrder; ++k )
         {
-            PoleAngle = PI * (double)(2*k+1)/(double)(2*FilterOrder);
+            PoleAngle = PI * (double) (2 * k + 1) / (double) (2 * FilterOrder);
             SinPoleAngle = Math.sin(PoleAngle);
             CosPoleAngle = Math.cos(PoleAngle);
-            a = 1.0 + s2t*SinPoleAngle;
-            RCoeffs[2*k] = c2t/a;
-            RCoeffs[2*k+1] = s2t*CosPoleAngle/a;
-            TCoeffs[2*k] = -2.0*cp*(ct+st*SinPoleAngle)/a;
-            TCoeffs[2*k+1] = -2.0*cp*st*CosPoleAngle/a;
+            a = 1.0 + s2t * SinPoleAngle;
+            RCoeffs[2 * k] = c2t / a;
+            RCoeffs[2 * k + 1] = s2t * CosPoleAngle / a;
+            TCoeffs[2 * k] = -2.0 * cp * (ct + st * SinPoleAngle) / a;
+            TCoeffs[2 * k + 1] = -2.0 * cp*st * CosPoleAngle / a;
         }
 
         DenomCoeffs = TrinomialMultiply(FilterOrder, TCoeffs, RCoeffs );
 
         DenomCoeffs[1] = DenomCoeffs[0];
         DenomCoeffs[0] = 1.0;
-        for( k = 3; k <= 2*FilterOrder; ++k )
-            DenomCoeffs[k] = DenomCoeffs[2*k-2];
 
+        for( k = 3; k <= 2 * FilterOrder; ++k ) {
+            DenomCoeffs[k] = DenomCoeffs[2 * k - 2];
+        }
 
         return DenomCoeffs;
     }
@@ -283,9 +308,7 @@ public class IIR {
     private double[] res = null;
     public short[] process(short[] value)
     {
-        //Log.d("IIR", "process: value length = " + value.length);
-
-        for(int i=0;i<value.length;i++)
+        for(int i = 0; i < value.length; i++)
         {
 
             double tmp = band_coefficient_b[0]*value[i];
@@ -316,7 +339,6 @@ public class IIR {
             }
 
             value[i] = (short)tmp;
-
         }
 
         return value;
@@ -329,8 +351,9 @@ public class IIR {
 
     public double[] getDen()
     {
-        double[] res = new double[2*n+1];
-        for(int i=0;i<2*n+1;i++)
+        double[] res = new double[2 * n + 1];
+
+        for(int i=0; i < 2 * n + 1; i++)
         {
             res[i] = DenC[i];
         }
