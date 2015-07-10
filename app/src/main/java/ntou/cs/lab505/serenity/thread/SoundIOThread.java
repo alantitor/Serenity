@@ -67,16 +67,13 @@ public class SoundIOThread extends Thread {
             long timeStartNs = System.nanoTime();
             //this.setPriority(MAX_PRIORITY);
 
-
             // read sound data from microphone.
             dataUnit = soundInputPool.read();
-/*
+
             // pipe data to output queue.
             if (dataUnit != null && dataUnit.getVectorLength() > 0) {
                 soundOutputQueue.add(dataUnit);
             }
-
-            //Log.d("SoundIOThread", "in run. queue size: " + soundInputQueue.size() + " " + soundOutputQueue.size());
 
             // output sound data to speaker.
             //dataUnit = null;
@@ -84,7 +81,6 @@ public class SoundIOThread extends Thread {
                 dataUnit = soundInputQueue.poll();
                 soundOutputPool.write(dataUnit);
             }
-            */
 
             // record information.
             long timeStopMs = System.currentTimeMillis();
@@ -92,7 +88,6 @@ public class SoundIOThread extends Thread {
             Log.d("SoundIOThread", "in run. time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
             Log.d("SoundIOThread", "in run. priority: " + this.getPriority());
         }
-
 
         Log.d("SoundIOThread", "in run. thread stop.");
     }
