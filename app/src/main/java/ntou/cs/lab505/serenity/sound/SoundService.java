@@ -28,13 +28,13 @@ public class SoundService extends Service {
 
     // service state.
     private boolean serviceState = false;
-
     // read data from database.
+    int sampleRate = 8000;
     IOSetUnit ioSetUnit;
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
-
     // sound process threads object.
+    SoundAllThread soundAllThread;
 
 
     public class SoundServiceBinder extends Binder {
@@ -92,47 +92,21 @@ public class SoundService extends Service {
         bandGainSetUnitArrayList = bandSettingAdapter.getData();
         bandSettingAdapter.close();
 
-
+        // initial sound process object.
+        soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        soundAllThread.setPriority(Thread.MAX_PRIORITY);
     }
-
-    //SoundIOThread soundIOThread;
-    //SoundProcessThread soundProcessThread;
-    //private LinkedBlockingQueue<SoundVectorUnit> soundQueue1 = new LinkedBlockingQueue<>();
-    //private LinkedBlockingQueue<SoundVectorUnit> soundQueue2 = new LinkedBlockingQueue<>();
-
-    SoundAllThread soundAllThread;
 
     public void serviceStart() {
         Log.d("SoundService", "in serviceStart. success.");
         serviceState = true;
-
-        soundAllThread = new SoundAllThread();
-        soundAllThread.setPriority(Thread.MAX_PRIORITY);
         soundAllThread.threadStart();
-
-
-        //soundProcessThread = new SoundProcessThread();
-        //soundProcessThread.setSoundInputQueue(soundQueue1);
-        //soundProcessThread.setSoundOutputQueue(soundQueue2);
-        //soundProcessThread.setPriority(Thread.MIN_PRIORITY);
-        //soundProcessThread.threadStart();
-
-
-        //soundIOThread = new SoundIOThread();
-        //soundIOThread.setSoundInputQueue(soundQueue1);
-        //soundIOThread.setSoundOutputQueue(soundQueue2);
-        //soundIOThread.setPriority(Thread.MAX_PRIORITY);
-        //soundIOThread.threadStart();
     }
 
     public void serviceStop() {
         Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
         soundAllThread.threadStop();
-        //soundIOThread.threadStop();
-        //soundIOThread = null;
-        //soundProcessThread.threadStop();
-        //soundProcessThread = null;
     }
 
     public boolean getServiceState() {
