@@ -93,11 +93,12 @@ public class  BandGain {
         }
 
 
+        // extra sound data.
         short[] tempVector = inputUnit.getLeftChannel();
 
         //Log.d("BandGain", "in process. length: " + inputUnit.getLeftChannel().length + " " + tempVector.length);
-        Log.d("BandGain", "in run. db origin: " + calculateDb(tempVector));
-        Log.d("BandGain", "in process. data origin: " + tempVector[100] + tempVector[101] + tempVector[102] + tempVector[103]);
+        //Log.d("BandGain", "in run. db origin: " + calculateDb(tempVector));
+        //Log.d("BandGain", "in process. data origin: " + tempVector[100] + tempVector[101] + tempVector[102] + tempVector[103]);
         SoundVectorUnit outputUnit = null;
 
         // process data.
@@ -106,12 +107,12 @@ public class  BandGain {
             for (int count = 0; count < filterBankNumberLeft; count++) {
                 // cut bands.
                 soundBandListL.add(iirLeftList.get(count).process(tempVector.clone()));  // should I use clone()?
-                Log.d("BandGain", "in run. db before: " + calculateDb(soundBandListL.get(count)));
-                Log.d("BandGain", "in process. data band: " + soundBandListL.get(count)[100] + soundBandListL.get(count)[101] + soundBandListL.get(count)[102] + soundBandListL.get(count)[103]);
+                //Log.d("BandGain", "in run. db before: " + calculateDb(soundBandListL.get(count)));
+                //Log.d("BandGain", "in process. data band: " + soundBandListL.get(count)[100] + soundBandListL.get(count)[101] + soundBandListL.get(count)[102] + soundBandListL.get(count)[103]);
                 // gain db.
                 soundBandListL.set(count, autoGain(soundBandListL.get(count), count, 0));
-                Log.d("BandGain", "in run. db after: " + calculateDb(soundBandListL.get(count)));
-                Log.d("BandGain", "in process. data band gain: " + soundBandListL.get(count)[100] + soundBandListL.get(count)[101] + soundBandListL.get(count)[102] + soundBandListL.get(count)[103]);
+                //Log.d("BandGain", "in run. db after: " + calculateDb(soundBandListL.get(count)));
+                //Log.d("BandGain", "in process. data band gain: " + soundBandListL.get(count)[100] + soundBandListL.get(count)[101] + soundBandListL.get(count)[102] + soundBandListL.get(count)[103]);
             }
         } else if (channelNumber == 2) {
             // read left channel data.
@@ -150,6 +151,7 @@ public class  BandGain {
             outputUnit = new SoundVectorUnit(channelMix(soundBandListL), null);
         }
 
+        // clear variables.
         soundBandListL.clear();
         soundBandListR.clear();
 
