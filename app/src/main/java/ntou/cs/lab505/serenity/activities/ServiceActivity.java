@@ -8,13 +8,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +17,7 @@ import ntou.cs.lab505.serenity.R;
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
-import ntou.cs.lab505.serenity.sound.SoundService;
+import ntou.cs.lab505.serenity.servicemanager.SoundService;
 
 public class ServiceActivity extends Activity {
 
@@ -48,7 +43,7 @@ public class ServiceActivity extends Activity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d("ServiceActivity", "onSrviceConnected.");
+            //Log.d("ServiceActivity", "onSrviceConnected.");
             SoundService.SoundServiceBinder mBinder = (SoundService.SoundServiceBinder) service;
             soundService = mBinder.getService();
             boundState = true;
@@ -56,14 +51,14 @@ public class ServiceActivity extends Activity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d("ServiceActivity", "onServiceDisconnected.");
+            //Log.d("ServiceActivity", "onServiceDisconnected.");
             boundState = false;
         }
     };
 
     @Override
     protected void onStart() {
-        Log.d("ServiceActivity", "in onStart.");
+        //Log.d("ServiceActivity", "in onStart.");
         super.onStart();
 
         Intent intent = new Intent(this, SoundService.class);
@@ -109,7 +104,6 @@ public class ServiceActivity extends Activity {
             controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
         } else {
             // start service.
-            soundService.serviceInitParams();
             soundService.serviceStart();
             controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
         }
