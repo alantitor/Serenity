@@ -1,4 +1,4 @@
-package ntou.cs.lab505.serenity.thread;
+package ntou.cs.lab505.serenity.servicemanager.thread;
 
 import android.util.Log;
 
@@ -14,24 +14,39 @@ import ntou.cs.lab505.serenity.stream.SoundOutputPool;
 
 /**
  * Created by alan on 2015/7/9.
+ *
+ * wrap sound process modules.
+ * this class contains sound input, frequency shift, band gain and sound output modules.
+ * all works run at one thread.
  */
 public class SoundAllThread extends Thread {
 
+    // control thread state.
     private boolean threadState;
-
+    // sound process object.
     SoundInputPool soundInputPool;
     FrequencyShift frequencyShift;
     BandGain bandGain;
     SoundOutputPool soundOutputPool;
 
 
+    /**
+     * construct default object.
+     */
     public SoundAllThread() {
-        soundInputPool = new SoundInputPool(8000, 0);
-        frequencyShift = new FrequencyShift(8000, 1, 0, 0, 0);
-        bandGain = new BandGain(8000, 200, 3000, 10, 10, 10);
-        soundOutputPool = new SoundOutputPool(8000, 1, 2, 0);
+        soundInputPool = new SoundInputPool(16000, 0);
+        frequencyShift = new FrequencyShift(16000, 1, 0, 0, 0);
+        bandGain = new BandGain(16000, 200, 3999, 10, 10, 10);
+        soundOutputPool = new SoundOutputPool(16000, 1, 2, 0);
     }
 
+    /**
+     * construct object with parameters.
+     * @param sampleRate
+     * @param ioSetUnit
+     * @param semiValue
+     * @param bandGainSetUnits
+     */
     public SoundAllThread(int sampleRate, IOSetUnit ioSetUnit, int semiValue, ArrayList<BandGainSetUnit> bandGainSetUnits) {
         soundInputPool = new SoundInputPool(sampleRate, ioSetUnit.getInputType());
         frequencyShift = new FrequencyShift(sampleRate, ioSetUnit.getChannelNumber(), semiValue, 0, 0);
@@ -39,6 +54,9 @@ public class SoundAllThread extends Thread {
         soundOutputPool = new SoundOutputPool(sampleRate, ioSetUnit.getChannelNumber(), 2, ioSetUnit.getOutputType());
     }
 
+    /**
+     * start thread.
+     */
     public void threadStart(){
         soundInputPool.open();
         soundOutputPool.open();
@@ -46,6 +64,9 @@ public class SoundAllThread extends Thread {
         this.start();
     }
 
+    /**
+     * stop thread.
+     */
     public void threadStop() {
         soundInputPool.close();
         soundOutputPool.close();
@@ -53,45 +74,61 @@ public class SoundAllThread extends Thread {
         this.interrupt();
     }
 
-    public void run() {
-         Log.d("SoundAllThread", "in run. thread start.");
-        SoundVectorUnit dataUnit = null;
+    /**
+     * return thread state.
+     * @return
+     */
+    public boolean getThreadState() {
+        return this.threadState;
+    }
 
+    /**
+     * process sound.
+     */
+    public void run() {
+        Log.d("SoundAllThread", "in run. thread start.");
+        // set thread priority.
+        //this.setPriority(MAX_PRIORITY);
+        //Log.d("SoundAllThread", "in run. priority: " + this.getPriority());
+        SoundVectorUnit dataUnit = null;
+        // record time.
+        long timeStartMs, timeMs1, timeMs2, timeMs3, timeStopMs;
+        double timeStartNs, timeNs1, timeNs2, timeNs3, timeStopNs;
 
         while(threadState) {
-            //this.setPriority(MAX_PRIORITY);
-            //android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-            //Log.d("SoundAllThread", "in run. priority: " + this.getPriority());
-
-            long timeStartMs = System.currentTimeMillis();
-            double timeStartNs = System.nanoTime() / 1000000.0;
+            // record start process time. record microphone start read time.
+            timeStartMs = System.currentTimeMillis();
+            timeStartNs = System.nanoTime() / 1000000.0;
 
             // read sound data from microphone.
             dataUnit = soundInputPool.read();
 
-            long timeMs1 = System.currentTimeMillis();
-            double timeNs1 = System.nanoTime() / 1000000.0;
+            // record microphone finish read time. record star shift frequency time.
+            timeMs1 = System.currentTimeMillis();
+            timeNs1 = System.nanoTime() / 1000000.0;
 
             // shift sound frequency.
             dataUnit = frequencyShift.process(dataUnit);
 
-            long timeMs2 = System.currentTimeMillis();
-            double timeNs2 = System.nanoTime() / 1000000.0;
+            // record finish shift frequency time. record start band gain time.
+            timeMs2 = System.currentTimeMillis();
+            timeNs2 = System.nanoTime() / 1000000.0;
 
             // cut bands and gain db.
             dataUnit = bandGain.process(dataUnit);
 
-            long timeMs3 = System.currentTimeMillis();
-            double timeNs3 = System.nanoTime() / 1000000.0;
+            // record finish band gain time. record speaker star write time.
+            timeMs3 = System.currentTimeMillis();
+            timeNs3 = System.nanoTime() / 1000000.0;
 
             // output sound data to speaker.
             soundOutputPool.write(dataUnit);
 
+            // record speaker finish write time.
+            timeStopMs = System.currentTimeMillis();
+            timeStopNs = System.nanoTime() / 1000000;
 
-            // record information.
-            long timeStopMs = System.currentTimeMillis();
-            double timeStopNs = System.nanoTime() / 1000000;
-
+            // output time information.
             Log.d("SoundAllThread", "in run. exclude time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
 
             Log.d("SoundAllThread", "in run. module time: " + "(" + (timeNs1 - timeStartNs) + " " + (timeMs1 - timeStartMs) + ") "

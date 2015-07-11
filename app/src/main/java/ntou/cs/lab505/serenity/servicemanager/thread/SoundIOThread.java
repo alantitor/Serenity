@@ -1,4 +1,4 @@
-package ntou.cs.lab505.serenity.thread;
+package ntou.cs.lab505.serenity.servicemanager.thread;
 
 import android.util.Log;
 
@@ -10,6 +10,8 @@ import ntou.cs.lab505.serenity.stream.SoundOutputPool;
 
 /**
  * Created by alan on 2015/7/8.
+ *
+ * this class used to manager sound input and sound output function.
  */
 public class SoundIOThread extends Thread {
 
@@ -22,8 +24,8 @@ public class SoundIOThread extends Thread {
 
 
     public SoundIOThread() {
-        soundInputPool = new SoundInputPool(8000, 0);
-        soundOutputPool = new SoundOutputPool(8000, 1, 2, 0);
+        soundInputPool = new SoundInputPool(16000, 0);
+        soundOutputPool = new SoundOutputPool(16000, 1, 2, 0);
     }
 
     public SoundIOThread(int sampleRate, int soundInMode, int soundOutChannelNumber, int soundOutLR, int SoundOutMode) {

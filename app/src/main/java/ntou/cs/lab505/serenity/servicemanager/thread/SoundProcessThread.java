@@ -1,4 +1,4 @@
-package ntou.cs.lab505.serenity.thread;
+package ntou.cs.lab505.serenity.servicemanager.thread;
 
 import android.util.Log;
 
@@ -10,6 +10,8 @@ import ntou.cs.lab505.serenity.sound.frequencyshift.FrequencyShift;
 
 /**
  * Created by alan on 7/7/15.
+ *
+ * this class used to manager sound process function.
  */
 public class SoundProcessThread extends Thread {
 
@@ -23,7 +25,7 @@ public class SoundProcessThread extends Thread {
 
     public SoundProcessThread() {
         frequencyShift = new FrequencyShift();
-        bandGain = new BandGain(8000, 200, 3999, 5, 5, 5);
+        bandGain = new BandGain(16000, 200, 3999, 5, 5, 5);
     }
 
     public SoundProcessThread(int sampleRate, int channelNumber, int semi, int pitch, int rate, int tempo, int lowBand, int highBand, int gain40, int gain60, int gain80) {
@@ -59,23 +61,19 @@ public class SoundProcessThread extends Thread {
             long timeStartNs = System.nanoTime();
             //this.setPriority(MAX_PRIORITY);
 
-
             // read sound data from queue.
-            //dataUnit = soundInputQueue.poll();
+            dataUnit = soundInputQueue.poll();
             // check data state.
-            //if (dataUnit != null && dataUnit.getVectorLength() > 0) {
-            //    Log.d("SoundProcessThread", "in run. no data, continue.");
-            //    continue;
-            //}
-
+            if (dataUnit != null && dataUnit.getVectorLength() > 0) {
+                //Log.d("SoundProcessThread", "in run. no data, continue.");
+                continue;
+            }
 
             // process data.
             dataUnit = frequencyShift.process(dataUnit);
 
-
             // pipe data.
-            //soundOutputQueue.add(soundInputQueue.poll());
-
+            soundOutputQueue.add(soundInputQueue.poll());
 
             // record information.
             long timeStopMs = System.currentTimeMillis();

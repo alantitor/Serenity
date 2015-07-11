@@ -1,25 +1,19 @@
-package ntou.cs.lab505.serenity.sound;
+package ntou.cs.lab505.serenity.servicemanager;
 
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
-import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
-import ntou.cs.lab505.serenity.thread.SoundAllThread;
-import ntou.cs.lab505.serenity.thread.SoundIOThread;
-import ntou.cs.lab505.serenity.thread.SoundProcessThread;
+import ntou.cs.lab505.serenity.servicemanager.thread.SoundAllThread;
 
 /**
  * Created by alan on 2015/7/3.
@@ -29,12 +23,14 @@ public class SoundService extends Service {
     // service state.
     private boolean serviceState = false;
     // read data from database.
+    //int sampleRate = 16000;
     int sampleRate = 16000;
     IOSetUnit ioSetUnit;
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
     // sound process threads object.
-    SoundAllThread soundAllThread;
+    //SoundAllThread soundAllThread;
+    SoundThreadPool soundThreadPool;
 
 
     public class SoundServiceBinder extends Binder {
@@ -47,13 +43,13 @@ public class SoundService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("SoundService", "in onCreate.");
+        //Log.d("SoundService", "in onCreate.");
         super.onCreate();
     }
 
     @Override
     public void onDestroy() {
-        Log.d("SoundService", "in onDestroy.");
+        //Log.d("SoundService", "in onDestroy.");
         super.onDestroy();
     }
 
@@ -72,8 +68,10 @@ public class SoundService extends Service {
         return super.onUnbind(intent);
     }
 
-    public void serviceInitParams() {
+    public void serviceStart() {
+        //Log.d("SoundService", "in serviceStart. success.");
 
+        // initial objects.
         // read IO setting data.
         IOSettingAdapter ioSettingAdapter = new IOSettingAdapter(this.getApplicationContext());
         ioSettingAdapter.open();
@@ -93,20 +91,21 @@ public class SoundService extends Service {
         bandSettingAdapter.close();
 
         // initial sound process object.
-        soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
-        soundAllThread.setPriority(Thread.MAX_PRIORITY);
-    }
+        //soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        //soundAllThread.setPriority(Thread.MAX_PRIORITY);
+        soundThreadPool = new SoundThreadPool(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
 
-    public void serviceStart() {
-        Log.d("SoundService", "in serviceStart. success.");
         serviceState = true;
-        soundAllThread.threadStart();
+
+        //soundAllThread.threadStart();
+        soundThreadPool.threadStart();
     }
 
     public void serviceStop() {
-        Log.d("SoundService", "in serviceStop. success.");
+        //Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
-        soundAllThread.threadStop();
+        //soundAllThread.threadStop();
+        soundThreadPool.threadStop();
     }
 
     public boolean getServiceState() {
