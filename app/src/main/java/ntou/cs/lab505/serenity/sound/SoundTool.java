@@ -1,5 +1,7 @@
 package ntou.cs.lab505.serenity.sound;
 
+import android.media.AudioFormat;
+import android.media.AudioRecord;
 import android.os.Environment;
 import android.util.Log;
 
@@ -61,6 +63,11 @@ public class SoundTool {
         return outputVector;
     }
 
+    /**
+     * mix bands to a sound frame.
+     * @param soundBands
+     * @return
+     */
     public static short[] channelMix(ArrayList<short[]> soundBands) {
         short[] tempVector = new short[soundBands.get(0).length];
         int temp = 0;
@@ -93,6 +100,11 @@ public class SoundTool {
         return (int)sum;
     }
 
+    /**
+     * calculate sound frame db.
+     * @param data
+     * @return
+     */
     public static double calculateDbDouble(short[] data) {
         double sum = 0;
 
@@ -104,6 +116,11 @@ public class SoundTool {
         return sum;
     }
 
+    /**
+     * save data vector to file.
+     * @param data
+     * @param fileName
+     */
     public static void saveVectorToDataFile(short[] data, String fileName) {
         File file = new File(Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName + ".txt");
         FileOutputStream fOut;
@@ -127,5 +144,17 @@ public class SoundTool {
 
     public static double mag2db(double value) {
         return Math.pow(10, value / 20);
+    }
+
+    /**
+     * check device sample rate support.
+     */
+    public static void checkSystemSupportSampleRate() {
+        for (int rate : new int[]{8000, 11025, 16000, 22050, 44100}) {  // add the rates you wish to check against
+            int bufferSize = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_CONFIGURATION_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+            if (bufferSize > 0) {
+                Log.d("SoundTool", "in checkSystemSupportSampleRate. supprt sample rate: " + rate);
+            }
+        }
     }
 }
