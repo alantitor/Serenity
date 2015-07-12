@@ -142,7 +142,7 @@ public class  BandGain {
 
         // mix bands.
         if (channelNumber == 1) {
-            outputUnit = new SoundVectorUnit(channelMix(soundBandListL), null);
+            outputUnit = new SoundVectorUnit(channelMix(soundBandListL));
             //outputUnit = new SoundVectorUnit(tempVector);
             //Log.d("BandGain", "in run. db left mix: " + calculateDb(outputUnit.getLeftChannel()));
         } else if (channelNumber == 2) {
