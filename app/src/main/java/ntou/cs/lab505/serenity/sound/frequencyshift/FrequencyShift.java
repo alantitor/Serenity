@@ -81,12 +81,11 @@ public class FrequencyShift {
 
         // receive sound from SoundTouch object.
         short[] outputVector = soundtouch.receiveSamples();
-        // new space have some bugs. space not enough when use sample rate 44100.
         while ((temp = soundtouch.receiveSamples()).length > 0) {
             temp2 = outputVector;  // swap old data.
             outputVector = new short[temp.length + temp2.length];  // extend array size.
             System.arraycopy(temp2, 0, outputVector, 0, temp2.length);  // copy old data.
-            System.arraycopy(temp, 0, outputVector, temp2.length + 1, temp.length);  // copy new data.
+            System.arraycopy(temp, 0, outputVector, temp2.length, temp.length);  // copy new data.
         }
 
 
