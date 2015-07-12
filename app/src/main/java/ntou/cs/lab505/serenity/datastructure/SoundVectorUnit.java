@@ -17,7 +17,13 @@ public class SoundVectorUnit {
     public SoundVectorUnit(short[] leftChannel, short[] rightChannel) {
         this.leftChannel = leftChannel;
         this.rightChannel = rightChannel;
-        channelNumber = 2;
+
+        // below code have not be confirmed. if system get bugs, please check this part.
+        if (rightChannel != null) {
+            channelNumber = 2;
+        } else {
+            channelNumber = 1;
+        }
     }
 
     public void setLeftChannel(short[] leftChannel) {

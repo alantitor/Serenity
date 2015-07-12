@@ -104,6 +104,7 @@ public class  BandGain {
         // process data.
         if (channelNumber == 1) {
             // read left channel data.
+            //Log.d("BandGain", "in process. channel number: 1");
             for (int count = 0; count < filterBankNumberLeft; count++) {
                 // cut bands.
                 soundBandListL.add(iirLeftList.get(count).process(tempVector.clone()));  // should I use clone()?
@@ -116,6 +117,7 @@ public class  BandGain {
             }
         } else if (channelNumber == 2) {
             // read left channel data.
+            //Log.d("BandGain", "in process. channel number: w");
             for (int count = 0; count < filterBankNumberLeft; count++) {
                 // cut bands.
                 soundBandListL.add(iirLeftList.get(count).process(tempVector.clone()));  // should I use clone()?
