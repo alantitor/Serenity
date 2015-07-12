@@ -49,7 +49,7 @@ public class SoundAllThread extends Thread {
      */
     public SoundAllThread(int sampleRate, IOSetUnit ioSetUnit, int semiValue, ArrayList<BandGainSetUnit> bandGainSetUnits) {
         soundInputPool = new SoundInputPool(sampleRate, ioSetUnit.getInputType());
-        frequencyShift = new FrequencyShift(sampleRate, ioSetUnit.getChannelNumber(), semiValue, 0, 0);
+        frequencyShift = new FrequencyShift(sampleRate, 1, semiValue, 0, 0);  // do not set channel number as 2.
         bandGain = new BandGain(sampleRate, bandGainSetUnits);
         soundOutputPool = new SoundOutputPool(sampleRate, ioSetUnit.getChannelNumber(), 2, ioSetUnit.getOutputType());
     }
@@ -129,12 +129,14 @@ public class SoundAllThread extends Thread {
             timeStopNs = System.nanoTime() / 1000000;
 
             // output time information.
+            /*
             Log.d("SoundAllThread", "in run. exclude time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
 
             Log.d("SoundAllThread", "in run. module time: " + "(" + (timeNs1 - timeStartNs) + " " + (timeMs1 - timeStartMs) + ") "
                                                             + "(" + (timeNs2 - timeNs1) + " " + (timeMs2 - timeMs1) + ") "
                                                             + "(" +  (timeNs3 - timeNs2) + " " + (timeMs3 - timeMs2) + ") "
                                                             + "(" +  (timeStopNs - timeNs3) + " " + (timeStopMs - timeMs3) + ")");
+            */
         }
 
         Log.d("SoundAllThread", "in run. thread stop.");
