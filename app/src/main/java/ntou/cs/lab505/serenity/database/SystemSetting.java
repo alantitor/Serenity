@@ -5,5 +5,5 @@ package ntou.cs.lab505.serenity.database;
  */
 public class SystemSetting {
 
-    public static final int sampleRate = 16000;
+    public static final int SAMPLERATE = 16000;
 }
