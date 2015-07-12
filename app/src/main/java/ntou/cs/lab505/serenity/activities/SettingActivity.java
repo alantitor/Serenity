@@ -34,13 +34,13 @@ public class SettingActivity extends Activity {
     }
 
     public void buttonPureToneTest(View view) {
-        //Intent intent = new Intent(this, PureToneTestActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, PureToneTestActivity.class);
+        startActivity(intent);
     }
 
     public void buttonAudiogramTest(View view) {
-        //Intent intent = new Intent(this, AudiogramTestActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, AudiogramTestActivity.class);
+        startActivity(intent);
     }
 
     public void buttonGuide(View view) {
