@@ -24,14 +24,12 @@
     <!-- string of setting activity -->
 
     <!-- other string -->
-    <resource>
-        <string-array name="freq_array">
-            <item>250</item>
-            <item>500</item>
-            <item>1000</item>
-            <item>2000</item>
-            <item>4000</item>
-        </string-array>
-    </resource>
+    <string-array name="freq_array">
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>4000</item>
+    </string-array>
 
 </resources>
