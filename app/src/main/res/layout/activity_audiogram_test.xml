@@ -73,24 +73,22 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <RadioGroup
-                        android:id="@+id/radioGroup_activity_audiogram_test"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#525252"
+                        android:textSize="18dp"
+                        android:fontFamily="Roboto, sans-serif"
+                        android:text="dB值:"/>
 
-                        <RadioButton
-                            android:id="@+id/leftchannel_activity_audiogram_test"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:text="左耳(藍)" />
-
-                        <RadioButton
-                            android:id="@+id/rightchannel_activityh_audiogram_test"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="右耳(紅)" />
-                    </RadioGroup>
+                    <EditText
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="number"
+                        android:id="@+id/db_activity_activity_audiogram_test"
+                        android:text="40"/>
 
                 </LinearLayout>
 
@@ -105,22 +103,24 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <TextView
+                        <RadioGroup
+                            android:id="@+id/radioGroup_activity_audiogram_test"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:textColor="#525252"
-                            android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif"
-                            android:text="dB值:"/>
+                            android:layout_height="wrap_content" >
 
-                        <EditText
-                            android:layout_width="70dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:inputType="number"
-                            android:id="@+id/db_activity_activity_audiogram_test"
-                            android:text="40"/>
+                            <RadioButton
+                                android:id="@+id/leftchannel_activity_audiogram_test"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="左耳(藍)" />
+
+                            <RadioButton
+                                android:id="@+id/rightchannel_activityh_audiogram_test"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="右耳(紅)" />
+                        </RadioGroup>
 
                     </LinearLayout>
 
