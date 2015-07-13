@@ -55,7 +55,7 @@ public class IOSettingAdapter {
             // insert new data.
             ContentValues insertValues = new ContentValues();
             insertValues.put(TableContract.T_IO_USERID, DBParams.USER_ID);
-            insertValues.put(TableContract.T_IO_CHANNEL, 0);
+            insertValues.put(TableContract.T_IO_CHANNEL, 1);
             insertValues.put(TableContract.T_IO_INPUT, 0);
             insertValues.put(TableContract.T_IO_OUTPUT, 0);
             insertValues.put(TableContract.T_IO_STATE, 1);
