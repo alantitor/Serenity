@@ -3,6 +3,7 @@ package ntou.cs.lab505.serenity.activities;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RadioButton;
@@ -160,9 +161,9 @@ public class IOSettingActivity extends Activity {
                 valueOutput = 0;
         }
 
-        //Log.d("IOSettingActivity", "in onPause. valueChannel: " + valueChannel);
-        //Log.d("IOSettingActivity", "in onPause. valueInput: " + valueInput);
-        //Log.d("IOSettingActivity", "in onPause. valueOutput: " + valueOutput);
+        Log.d("IOSettingActivity", "in onPause. valueChannel: " + valueChannel);
+        Log.d("IOSettingActivity", "in onPause. valueInput: " + valueInput);
+        Log.d("IOSettingActivity", "in onPause. valueOutput: " + valueOutput);
 
         // save data to database.
         IOSettingAdapter ioSettingAdapter = new IOSettingAdapter(this.getApplicationContext());

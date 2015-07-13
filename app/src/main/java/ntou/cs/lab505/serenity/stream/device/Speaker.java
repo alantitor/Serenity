@@ -3,6 +3,7 @@ package ntou.cs.lab505.serenity.stream.device;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.util.Log;
 
 /**
  * Created by alan on 6/11/15.
