@@ -18,6 +18,8 @@ import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.servicemanager.SoundService;
+import ntou.cs.lab505.serenity.stream.device.Microphone;
+import ntou.cs.lab505.serenity.stream.device.Speaker;
 
 public class ServiceActivity extends Activity {
 

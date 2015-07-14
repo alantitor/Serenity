@@ -1,9 +1,15 @@
 package ntou.cs.lab505.serenity.stream.device;
 
+import android.annotation.TargetApi;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.Build;
 import android.util.Log;
+
+import java.lang.reflect.Array;
+
+import ntou.cs.lab505.serenity.database.SystemSetting;
 
 /**
  * Created by alan on 6/11/15.
@@ -15,16 +21,12 @@ public class Speaker {
     private int sampleRate;
     private int channelNumber;
 
-
     /**
      *
      * @param sampleRate
      * @param channelNumber 1: one channel. 2: two channels.
      */
     public Speaker(int sampleRate, int channelNumber) {
-        /**
-         * if speaker get some problem, try add audioTrack buffer size. bufferSize + 2048, etc.
-         */
 
         this.sampleRate = sampleRate;
 
@@ -53,8 +55,10 @@ public class Speaker {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void open() {
         audioTrack.play();
+        audioTrack.setVolume(0.1f);
     }
 
     public void close() {
@@ -62,14 +66,17 @@ public class Speaker {
         audioTrack.release();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void write(short[] dataVector) {
 
         if (dataVector == null || dataVector.length == 0) {
             return ;
         }
 
+        //audioTrack.setVolume(1.0f);
         audioTrack.write(dataVector, 0, dataVector.length);
-        audioTrack.flush();  // is this code danger?
+        //audioTrack.setVolume(0.0f);
+        //audioTrack.flush();  // is this code danger?
     }
 
     /**

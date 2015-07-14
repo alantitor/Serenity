@@ -17,6 +17,8 @@ import ntou.cs.lab505.serenity.sound.frequencyshift.FrequencyShift;
 import ntou.cs.lab505.serenity.stream.SoundInputPool;
 import ntou.cs.lab505.serenity.stream.SoundOutputPool;
 
+import static ntou.cs.lab505.serenity.sound.SoundTool.getSpeakerBufferSize;
+
 /**
  * Created by alan on 2015/7/10.
  */
@@ -68,13 +70,14 @@ public class SoundThreadPool extends Thread {
         // thread control parameters.
         threadState = false;
         // thread manager parameters.
-        mProcessThreadPool = new ThreadPoolExecutor(NUMBER_OF_CORES,
-                                                    NUMBER_OF_CORES,
+        mProcessThreadPool = new ThreadPoolExecutor(NUMBER_OF_CORES - 1,
+                                                    NUMBER_OF_CORES - 1,
                                                     KEEP_ALIVE_TIME,
                                                     KEEP_ALIVE_TIME_UNIT,
                                                     mProcessWorkQueue);
 
         soundInputPool = new SoundInputPool(sampleRate, ioSetUnit.getInputType());
+        //soundInputPool = new SoundInputPool(sampleRate, 4);
         frequencyShift = new FrequencyShift(sampleRate, 1, semitoneValue, 0, 0);  // do not set channel number as 2.
         bandGain = new BandGain(sampleRate, bandGainSetUnitArrayList);
         soundOutputPool = new SoundOutputPool(sampleRate, ioSetUnit.getChannelNumber(), 2, ioSetUnit.getOutputType());
@@ -102,25 +105,31 @@ public class SoundThreadPool extends Thread {
         Runnable soundPlayRunnable = new SoundPlayRunnable();
 
         while (threadState) {
-            if (mProcessWorkQueue.size() > 0) {  // I don't know why use this design can control work queue size.
+            mProcessThreadPool.execute(soundRecordRunnable);
+
+            /*
+            if (soundDataQueue.size() > 5) {
                 mProcessThreadPool.execute(soundProcessRunnable);
-                mProcessThreadPool.execute(soundPlayRunnable);
-            } else {
-                mProcessThreadPool.execute(soundRecordRunnable);
-                mProcessThreadPool.execute(soundProcessRunnable);
+            }
+            */
+
+            if (soundDataQueue2.size() > 1) {
                 mProcessThreadPool.execute(soundPlayRunnable);
             }
 
-            Log.d("SoundThreadPool", "in run. work queue size: " + mProcessWorkQueue.size());
-            Log.d("SoundThreadPool", "in run. exclude time: " + recordAvg + ", " + processAvg + ", " + playAvg);
+            //Log.d("SoundThreadPool", "in run. queue size: " + soundDataQueue.size() + ", " + soundDataQueue2.size());
+            //Log.d("SoundThreadPool", "in run. exclude time: " + recordAvg + ", " + processAvg + ", " + playAvg);
         }
 
         mProcessThreadPool.shutdown();
-        soundDataQueue.clear();
+        //soundDataQueue.clear();
 
         Log.d("SoundThreadPool", "in run. thread stop.");
     }
 
+    /**
+     *
+     */
     private class SoundRecordRunnable implements Runnable {
 
         double ns0, ns1;
@@ -128,12 +137,13 @@ public class SoundThreadPool extends Thread {
 
         @Override
         public void run() {
+            //Log.d("SoundThreadPool", "in SoundRecordRunnable run. in.");
             ns0 = System.nanoTime() / 1000000.0;
 
             dataUnit = soundInputPool.read();
 
             if (dataUnit != null) {
-                soundDataQueue.add(dataUnit);
+                soundDataQueue2.add(dataUnit);
             }
 
             ns1 = System.nanoTime() / 1000000.0;
@@ -141,6 +151,9 @@ public class SoundThreadPool extends Thread {
         }
     }
 
+    /**
+     *
+     */
     private class SoundProcessRunnable implements Runnable {
 
         double ns0, ns1;
@@ -148,19 +161,22 @@ public class SoundThreadPool extends Thread {
 
         @Override
         public void run() {
+            //Log.d("SoundThreadPool", "in SoundProcessRunnable run. in.");
             ns0 = System.nanoTime() / 1000000.0;
+
+            //Log.d("debug", "speaker size: " + getSpeakerBufferSize(sampleRate, 1));
 
             if (soundDataQueue.size() > 0) {
                 dataUnit = soundDataQueue.poll();
 
-                if (dataUnit != null) {
+                //if (dataUnit != null) {
                     //dataUnit = frequencyShift.process(dataUnit);
 
 
                     soundDataQueue2.add(dataUnit);
-                }
+                //}
             } else {
-                Log.d("SoundThreadPool", "soundDataQueue no data.");
+                //Log.d("SoundThreadPool", "soundDataQueue no data.");
             }
 
             ns1 = System.nanoTime() / 1000000.0;
@@ -168,6 +184,9 @@ public class SoundThreadPool extends Thread {
         }
     }
 
+    /**
+     *
+     */
     private class SoundPlayRunnable implements Runnable {
 
         double ns0, ns1;
@@ -175,6 +194,7 @@ public class SoundThreadPool extends Thread {
 
         @Override
         public void run() {
+            //Log.d("SoundThreadPool", "in SoundPlayRunnable run. in.");
             ns0 = System.nanoTime() / 1000000.0;
 
             if (soundDataQueue2.size() > 0) {
@@ -184,7 +204,7 @@ public class SoundThreadPool extends Thread {
                     soundOutputPool.write(dataUnit);
                 }
             } else {
-                Log.d("SoundThreadPool", "soundDataQueue2 no data.");
+                //Log.d("SoundThreadPool", "soundDataQueue2 no data.");
             }
 
             ns1 = System.nanoTime() / 1000000.0;

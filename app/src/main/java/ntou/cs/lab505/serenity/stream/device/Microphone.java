@@ -3,6 +3,11 @@ package ntou.cs.lab505.serenity.stream.device;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.NoiseSuppressor;
+import android.util.Log;
+
+import ntou.cs.lab505.serenity.database.SystemSetting;
 
 /**
  * Created by alan on 6/11/15.
@@ -22,12 +27,14 @@ public class Microphone {
         recordBufSize = AudioRecord.getMinBufferSize(sampleRate,
                                                         AudioFormat.CHANNEL_CONFIGURATION_MONO,
                                                         AudioFormat.ENCODING_PCM_16BIT);
+        recordBufSize = 44100 * 2;
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                                         sampleRate,
                                         AudioFormat.CHANNEL_CONFIGURATION_MONO,  // CHANNEL_IN_MONO
                                         AudioFormat.ENCODING_PCM_16BIT,
                                         recordBufSize);
         dataVector = new short[recordBufSize];
+        Log.d("debug", "size: " + recordBufSize);
     }
 
     public void open() {
@@ -43,17 +50,6 @@ public class Microphone {
     public short[] read() {
 
         int buffReadResult = audioRecord.read(dataVector, 0, recordBufSize);
-
-        /*
-        int dataSum = 0;
-        for (int i = 0; i < buffReadResult; i++) {
-            dataSum += dataVector[i];
-        }
-
-        if (dataSum == 0) {
-            return null;
-        }
-        */
 
         if (buffReadResult > 0){
             return dataVector;

@@ -24,7 +24,7 @@ public class SoundService extends Service {
     // service state.
     private boolean serviceState = false;
     // read data from database.
-    int sampleRate = 16000;
+    int sampleRate = 44100;
     IOSetUnit ioSetUnit;
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
@@ -91,21 +91,21 @@ public class SoundService extends Service {
         bandSettingAdapter.close();
 
         // initial sound process object.
-        //soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
-        //soundAllThread.setPriority(Thread.MAX_PRIORITY);
-        soundThreadPool = new SoundThreadPool(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
-        soundThreadPool.setPriority(Thread.MAX_PRIORITY);
+        soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        soundAllThread.setPriority(Thread.MAX_PRIORITY);
+        //soundThreadPool = new SoundThreadPool(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        //soundThreadPool.setPriority(Thread.MAX_PRIORITY);
 
         serviceState = true;
-        //soundAllThread.threadStart();
-        soundThreadPool.threadStart();
+        soundAllThread.threadStart();
+        //soundThreadPool.threadStart();
     }
 
     public void serviceStop() {
         //Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
-        //soundAllThread.threadStop();
-        soundThreadPool.threadStop();
+        soundAllThread.threadStop();
+        //soundThreadPool.threadStop();
     }
 
     public boolean getServiceState() {

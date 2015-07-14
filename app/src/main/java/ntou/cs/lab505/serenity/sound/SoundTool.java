@@ -1,7 +1,9 @@
 package ntou.cs.lab505.serenity.sound;
 
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioRecord;
+import android.media.AudioTrack;
 import android.os.Environment;
 import android.util.Log;
 
@@ -155,6 +157,15 @@ public class SoundTool {
             if (bufferSize > 0) {
                 Log.d("SoundTool", "in checkSystemSupportSampleRate. supprt sample rate: " + rate);
             }
+        }
+    }
+
+    public static int getSpeakerBufferSize(int sampleRate, int channelNumber) {
+
+        if (channelNumber == 1) {
+            return AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        } else {
+            return AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_CONFIGURATION_STEREO, AudioFormat.ENCODING_PCM_16BIT);
         }
     }
 }
