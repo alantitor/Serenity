@@ -161,9 +161,9 @@ public class IOSettingActivity extends Activity {
                 valueOutput = 0;
         }
 
-        Log.d("IOSettingActivity", "in onPause. valueChannel: " + valueChannel);
-        Log.d("IOSettingActivity", "in onPause. valueInput: " + valueInput);
-        Log.d("IOSettingActivity", "in onPause. valueOutput: " + valueOutput);
+        //Log.d("IOSettingActivity", "in onPause. valueChannel: " + valueChannel);
+        //Log.d("IOSettingActivity", "in onPause. valueInput: " + valueInput);
+        //Log.d("IOSettingActivity", "in onPause. valueOutput: " + valueOutput);
 
         // save data to database.
         IOSettingAdapter ioSettingAdapter = new IOSettingAdapter(this.getApplicationContext());

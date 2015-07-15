@@ -29,7 +29,7 @@ public class FreqSettingActivity extends Activity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("FreqSettingActivity", "in oncreate. seekBar value: " + progress);
+                //Log.d("FreqSettingActivity", "in oncreate. seekBar value: " + progress);
                 seekValue = progress;
                 textView.setText(String.valueOf(seekToSemi(progress)));
             }

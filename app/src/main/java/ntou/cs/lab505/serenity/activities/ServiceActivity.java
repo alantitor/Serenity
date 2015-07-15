@@ -116,6 +116,10 @@ public class ServiceActivity extends Activity {
         startActivity(intent);
     }
 
+    /**
+     * check hearing aid setting.
+     * @return
+     */
     private boolean checkServiceState() {
 
         boolean state = false;

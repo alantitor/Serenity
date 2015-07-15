@@ -68,31 +68,30 @@ public class AudiogramTestActivity extends Activity{
        //Log.d("AudiogramTestActivity", "in buttonTest. db value: " + dbValue);
        //Log.d("AudiogramTestActivity", "in buttonTest. channel value: " + channelValue);
 
-       /*
-       switch(freq)
+       // fix db degree.
+       switch(freqValue)
 				{
 				case 250:
-					db = db+26;
+					dbValue = dbValue + 26;
 					break;
 				case 500:
-					db+=12;
+                    dbValue += 12;
 					break;
 				case 1000:
-					db+=7;
+                    dbValue += 7;
 					break;
 				case 2000:
-					db+=7;
+                    dbValue += 7;
 					break;
 				case 4000:
-					db+=10;
+                    dbValue += 10;
 					break;
 				}
-        */
 
        // generate sound.
-       pureToneGeneration = new PureToneGeneration(SystemSetting.SAMPLERATE);
+       pureToneGeneration = new PureToneGeneration(SystemSetting.SAMPLERATE_LOW);
        SoundVectorUnit dataUnit = new SoundVectorUnit(pureToneGeneration.generate(freqValue, 2, dbValue));
-       soundOutputPool = new SoundOutputPool(SystemSetting.SAMPLERATE, 2, channelValue, 0);
+       soundOutputPool = new SoundOutputPool(SystemSetting.SAMPLERATE_LOW, 2, channelValue, 0);
        soundOutputPool.open();
        soundOutputPool.write(dataUnit);
        soundOutputPool.close();

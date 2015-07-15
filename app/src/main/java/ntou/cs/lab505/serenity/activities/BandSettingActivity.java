@@ -329,7 +329,7 @@ public class BandSettingActivity extends Activity {
 
                 rightBorder.addView(view);
             } else {
-                Log.d("BandSettingActivity", "in onResume. wrong data in database.");
+                //Log.d("BandSettingActivity", "in onResume. wrong data in database.");
             }
         }
     }

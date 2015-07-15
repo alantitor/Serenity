@@ -26,7 +26,6 @@ public class DatabaseActivity extends Activity {
         String data = showDatabase();
 
         TextView tv = (TextView) findViewById(R.id.drawarea_activity_database);
-        //Resources res = getResources();
         tv.setText(data);
     }
 
