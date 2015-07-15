@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
+import ntou.cs.lab505.serenity.servicemanager.thread.SoundThreadPool;
 import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
@@ -29,9 +30,7 @@ public class SoundService extends Service {
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
     // sound process threads object.
-    SoundAllThread soundAllThread;
-    SoundThreadPool soundThreadPool;
-
+    SoundAllThread soundThread;
 
     public class SoundServiceBinder extends Binder {
         public SoundService getService() {
@@ -91,21 +90,17 @@ public class SoundService extends Service {
         bandSettingAdapter.close();
 
         // initial sound process object.
-        soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
-        soundAllThread.setPriority(Thread.MAX_PRIORITY);
-        //soundThreadPool = new SoundThreadPool(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
-        //soundThreadPool.setPriority(Thread.MAX_PRIORITY);
+        soundThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        soundThread.setPriority(Thread.MAX_PRIORITY);
 
         serviceState = true;
-        soundAllThread.threadStart();
-        //soundThreadPool.threadStart();
+        soundThread.threadStart();
     }
 
     public void serviceStop() {
         //Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
-        soundAllThread.threadStop();
-        //soundThreadPool.threadStop();
+        soundThread.threadStop();
     }
 
     public boolean getServiceState() {
