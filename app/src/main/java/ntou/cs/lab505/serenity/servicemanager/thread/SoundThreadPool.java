@@ -1,4 +1,4 @@
-package ntou.cs.lab505.serenity.servicemanager;
+package ntou.cs.lab505.serenity.servicemanager.thread;
 
 import android.util.Log;
 
@@ -68,8 +68,8 @@ public class SoundThreadPool extends Thread {
         // thread control parameters.
         threadState = false;
         // thread manager parameters.
-        mProcessThreadPool = new ThreadPoolExecutor(NUMBER_OF_CORES - 1,
-                                                    NUMBER_OF_CORES - 1,
+        mProcessThreadPool = new ThreadPoolExecutor(NUMBER_OF_CORES,
+                                                    NUMBER_OF_CORES,
                                                     KEEP_ALIVE_TIME,
                                                     KEEP_ALIVE_TIME_UNIT,
                                                     mProcessWorkQueue);
@@ -104,7 +104,7 @@ public class SoundThreadPool extends Thread {
 
         while (threadState) {
             mProcessThreadPool.execute(soundRecordRunnable);
-            //mProcessThreadPool.execute(soundPlayRunnable);
+            mProcessThreadPool.execute(soundPlayRunnable);
 
             //Log.d("SoundThreadPool", "in run. queue size: " + soundDataQueue.size() + ", " + soundDataQueue2.size());
             Log.d("SoundThreadPool", "in run. exclude time: " + recordAvg + ", " + processAvg + ", " + playAvg);
