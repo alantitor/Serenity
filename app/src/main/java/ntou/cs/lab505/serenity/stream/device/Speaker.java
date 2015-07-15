@@ -7,10 +7,6 @@ import android.media.AudioTrack;
 import android.os.Build;
 import android.util.Log;
 
-import java.lang.reflect.Array;
-
-import ntou.cs.lab505.serenity.database.SystemSetting;
-
 /**
  * Created by alan on 6/11/15.
  */
@@ -53,12 +49,13 @@ public class Speaker {
         } else {
             //
         }
+        Log.d("debug", "speaker buffer size: " + speakerBufSize);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void open() {
         audioTrack.play();
-        audioTrack.setVolume(0.1f);
+        audioTrack.setVolume(1.0f);
     }
 
     public void close() {
