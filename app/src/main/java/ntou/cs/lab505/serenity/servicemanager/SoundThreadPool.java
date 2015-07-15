@@ -8,7 +8,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import ntou.cs.lab505.serenity.database.SystemSetting;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
@@ -16,8 +15,7 @@ import ntou.cs.lab505.serenity.sound.bandgain.BandGain;
 import ntou.cs.lab505.serenity.sound.frequencyshift.FrequencyShift;
 import ntou.cs.lab505.serenity.stream.SoundInputPool;
 import ntou.cs.lab505.serenity.stream.SoundOutputPool;
-
-import static ntou.cs.lab505.serenity.sound.SoundTool.getSpeakerBufferSize;
+import ntou.cs.lab505.serenity.system.SystemParameters;
 
 /**
  * Created by alan on 2015/7/10.
@@ -37,7 +35,7 @@ public class SoundThreadPool extends Thread {
     ThreadPoolExecutor mProcessThreadPool;
 
     // sound parameters..
-    private int sampleRate = SystemSetting.SAMPLERATE;
+    private int sampleRate = SystemParameters.SAMPLERATE_HIGH;
     LinkedBlockingQueue<SoundVectorUnit> soundDataQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit> soundDataQueue2 = new LinkedBlockingQueue<>();
     // sound objects.
@@ -60,10 +58,10 @@ public class SoundThreadPool extends Thread {
                                                     mProcessWorkQueue);
 
         // sound parameter.
-        soundInputPool = new SoundInputPool(16000, 0);
-        frequencyShift = new FrequencyShift(16000, 1, 0, 0, 0);
-        bandGain = new BandGain(16000, 200, 3999, 10, 10, 10);
-        soundOutputPool = new SoundOutputPool(16000, 1, 2, 0);
+        soundInputPool = new SoundInputPool(SystemParameters.SAMPLERATE_LOW, 0);
+        frequencyShift = new FrequencyShift(SystemParameters.SAMPLERATE_LOW, 1, 0, 0, 0);
+        bandGain = new BandGain(SystemParameters.SAMPLERATE_LOW, 200, 7999, 10, 10, 10);
+        soundOutputPool = new SoundOutputPool(SystemParameters.SAMPLERATE_LOW, 1, 2, 0);
     }
 
     public SoundThreadPool(int sampleRate, IOSetUnit ioSetUnit, int semitoneValue, ArrayList<BandGainSetUnit> bandGainSetUnitArrayList) {
@@ -106,19 +104,10 @@ public class SoundThreadPool extends Thread {
 
         while (threadState) {
             mProcessThreadPool.execute(soundRecordRunnable);
-
-            /*
-            if (soundDataQueue.size() > 5) {
-                mProcessThreadPool.execute(soundProcessRunnable);
-            }
-            */
-
-            if (soundDataQueue2.size() > 1) {
-                mProcessThreadPool.execute(soundPlayRunnable);
-            }
+            //mProcessThreadPool.execute(soundPlayRunnable);
 
             //Log.d("SoundThreadPool", "in run. queue size: " + soundDataQueue.size() + ", " + soundDataQueue2.size());
-            //Log.d("SoundThreadPool", "in run. exclude time: " + recordAvg + ", " + processAvg + ", " + playAvg);
+            Log.d("SoundThreadPool", "in run. exclude time: " + recordAvg + ", " + processAvg + ", " + playAvg);
         }
 
         mProcessThreadPool.shutdown();
@@ -141,6 +130,7 @@ public class SoundThreadPool extends Thread {
             ns0 = System.nanoTime() / 1000000.0;
 
             dataUnit = soundInputPool.read();
+            soundOutputPool.write(dataUnit);
 
             if (dataUnit != null) {
                 soundDataQueue2.add(dataUnit);

@@ -1,6 +1,7 @@
 package ntou.cs.lab505.serenity.sound.frequencyshift;
 
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
+import ntou.cs.lab505.serenity.system.SystemParameters;
 
 /**
  * Created by alan on 7/6/15.
@@ -14,15 +15,13 @@ public class FrequencyShift {
     private int pitchSemiTones;
     private float rateChange;
     private float tempoChange;
-    private long startTime;
-    private long stopTime;
 
 
     /**
      * constructor
      */
     public FrequencyShift() {
-        this.sampleRate = 16000;
+        this.sampleRate = SystemParameters.SAMPLERATE_LOW;
         this.channels = 1;
         this.pitchSemiTones = 0;
         this.rateChange = 0.0f;

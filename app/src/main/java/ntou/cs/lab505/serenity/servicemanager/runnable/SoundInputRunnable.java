@@ -1,5 +1,6 @@
 package ntou.cs.lab505.serenity.servicemanager.runnable;
 
+import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 
 /**
@@ -12,7 +13,7 @@ public class SoundInputRunnable implements Runnable {
     IOSetUnit ioSetUnit;
 
     public SoundInputRunnable() {
-        this.sampleRate = 16000;
+        this.sampleRate = SystemParameters.SAMPLERATE_LOW;
         this.ioSetUnit = new IOSetUnit();
     }
 

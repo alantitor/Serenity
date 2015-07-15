@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
-import ntou.cs.lab505.serenity.database.SystemSetting;
+import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 import ntou.cs.lab505.serenity.servicemanager.thread.SoundAllThread;
@@ -24,7 +24,7 @@ public class SoundService extends Service {
     // service state.
     private boolean serviceState = false;
     // read data from database.
-    int sampleRate = 44100;
+    int sampleRate = SystemParameters.SAMPLERATE_HIGH;
     IOSetUnit ioSetUnit;
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;

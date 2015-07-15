@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.stream.SoundInputPool;
 import ntou.cs.lab505.serenity.stream.SoundOutputPool;
@@ -24,8 +25,8 @@ public class SoundIOThread extends Thread {
 
 
     public SoundIOThread() {
-        soundInputPool = new SoundInputPool(16000, 0);
-        soundOutputPool = new SoundOutputPool(16000, 1, 2, 0);
+        soundInputPool = new SoundInputPool(SystemParameters.SAMPLERATE_LOW, 0);
+        soundOutputPool = new SoundOutputPool(SystemParameters.SAMPLERATE_LOW, 1, 2, 0);
     }
 
     public SoundIOThread(int sampleRate, int soundInMode, int soundOutChannelNumber, int soundOutLR, int SoundOutMode) {
@@ -62,7 +63,6 @@ public class SoundIOThread extends Thread {
     public void run() {
         Log.d("SoundIOThread", "in run. thread start.");
         SoundVectorUnit dataUnit = null;
-
 
         while (threadState) {
             long timeStartMs = System.currentTimeMillis();

@@ -59,7 +59,6 @@ public class BandSettingAdapter {
                 //Log.d("BandSettingAdapter", "in saveData. gain60: " + dataUnit.get(count).getGain60());
                 //Log.d("BandSettingAdapter", "in saveData. gain80: " + dataUnit.get(count).getGain80());
 
-
                 insertValues = new ContentValues();
                 insertValues.put(TableContract.T_BAND_USERID, DBParams.USER_ID);
                 insertValues.put(TableContract.T_BAND_LR, dataUnit.get(count).getLr());

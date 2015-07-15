@@ -4,11 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
-import java.util.ArrayList;
-
-import ntou.cs.lab505.serenity.database.SystemSetting;
+import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.sound.bandgain.BandGain;
 import ntou.cs.lab505.serenity.sound.frequencyshift.FrequencyShift;
@@ -31,7 +28,7 @@ public class PureToneTest extends Service {
     int valueGain;
     int valueChannel = 0;
     int valueOutput = 0;
-    int sampleRate = SystemSetting.SAMPLERATE;
+    int sampleRate = SystemParameters.SAMPLERATE_LOW;
     int frameSize = 1400;
 
 

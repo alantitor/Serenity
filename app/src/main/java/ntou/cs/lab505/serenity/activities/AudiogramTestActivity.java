@@ -2,21 +2,17 @@ package ntou.cs.lab505.serenity.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import ntou.cs.lab505.serenity.R;
-import ntou.cs.lab505.serenity.database.SystemSetting;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.sound.soundgeneration.PureToneGeneration;
 import ntou.cs.lab505.serenity.stream.SoundOutputPool;
+import ntou.cs.lab505.serenity.system.SystemParameters;
 
 public class AudiogramTestActivity extends Activity{
 
@@ -89,9 +85,9 @@ public class AudiogramTestActivity extends Activity{
 				}
 
        // generate sound.
-       pureToneGeneration = new PureToneGeneration(SystemSetting.SAMPLERATE_LOW);
+       pureToneGeneration = new PureToneGeneration(SystemParameters.SAMPLERATE_LOW);
        SoundVectorUnit dataUnit = new SoundVectorUnit(pureToneGeneration.generate(freqValue, 2, dbValue));
-       soundOutputPool = new SoundOutputPool(SystemSetting.SAMPLERATE_LOW, 2, channelValue, 0);
+       soundOutputPool = new SoundOutputPool(SystemParameters.SAMPLERATE_LOW, 2, channelValue, 0);
        soundOutputPool.open();
        soundOutputPool.write(dataUnit);
        soundOutputPool.close();

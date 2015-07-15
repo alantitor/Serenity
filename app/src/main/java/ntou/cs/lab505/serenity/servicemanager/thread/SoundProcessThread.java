@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.sound.bandgain.BandGain;
 import ntou.cs.lab505.serenity.sound.frequencyshift.FrequencyShift;
@@ -25,7 +26,7 @@ public class SoundProcessThread extends Thread {
 
     public SoundProcessThread() {
         frequencyShift = new FrequencyShift();
-        bandGain = new BandGain(16000, 200, 3999, 5, 5, 5);
+        bandGain = new BandGain(SystemParameters.SAMPLERATE_LOW, 200, 7999, 5, 5, 5);
     }
 
     public SoundProcessThread(int sampleRate, int channelNumber, int semi, int pitch, int rate, int tempo, int lowBand, int highBand, int gain40, int gain60, int gain80) {
@@ -54,7 +55,6 @@ public class SoundProcessThread extends Thread {
     public void run() {
         Log.d("SoundProcessThread", "in run. thread start.");
         SoundVectorUnit dataUnit = null;
-
 
         while (threadState) {
             long timeStartMs = System.currentTimeMillis();

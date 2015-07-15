@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
+import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.serenity.stream.SoundInputPool;
 
@@ -22,7 +22,7 @@ public class SoundInputThread extends Thread {
 
 
     public SoundInputThread() {
-        soundInputPool = new SoundInputPool(16000, 0);
+        soundInputPool = new SoundInputPool(SystemParameters.SAMPLERATE_LOW, 0);
     }
 
     public SoundInputThread(int sampleRate, int mode) {
@@ -51,6 +51,7 @@ public class SoundInputThread extends Thread {
 
     public void run() {
         Log.d("SoundInputThread", "in run. thread start.");
+
         SoundVectorUnit dataUnit = null;
 
         while (threadState) {
