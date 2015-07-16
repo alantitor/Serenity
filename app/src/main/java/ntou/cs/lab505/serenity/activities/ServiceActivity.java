@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -98,14 +99,19 @@ public class ServiceActivity extends Activity {
             return ;
         }
 
+        // set system volume to max.
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
 
         // control service.
         if (soundService.getServiceState()) {
             // stop service.
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
             soundService.serviceStop();
             controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
         } else {
             // start service.
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
             soundService.serviceStart();
             controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
         }
