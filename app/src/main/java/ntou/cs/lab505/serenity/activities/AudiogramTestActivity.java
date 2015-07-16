@@ -37,8 +37,6 @@ public class AudiogramTestActivity extends Activity{
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.freq_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         freqSpinner.setAdapter(spinnerAdapter);
-
-
     }
 
    public void buttonTest(View view) {
