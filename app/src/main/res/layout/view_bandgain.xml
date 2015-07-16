@@ -30,6 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:gravity="left"
                     android:textColor="#525252"
                     android:textSize="18dp"
@@ -39,6 +40,8 @@
                 <EditText
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
@@ -50,6 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
@@ -58,6 +62,8 @@
                 <EditText
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
@@ -82,12 +88,14 @@
                     android:text="40dB: "/>
 
                 <EditText
-                    android:layout_width="60dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:inputType="numberSigned"
                     android:id="@+id/gain40_view_bandgain"/>
 
@@ -101,12 +109,14 @@
                     android:text="60dB: "/>
 
                 <EditText
-                    android:layout_width="60dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:inputType="numberSigned"
                     android:id="@+id/gain60_view_bandgain"/>
 
@@ -120,12 +130,14 @@
                     android:text="80dB: "/>
 
                 <EditText
-                    android:layout_width="60dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:inputType="numberSigned"
                     android:id="@+id/gain80_view_bandgain"/>
 

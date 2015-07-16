@@ -32,4 +32,13 @@
         <item>4000</item>
     </string-array>
 
+    <string-array name="mode_array">
+        <item>自訂</item>
+        <item>低頻音增強</item>
+        <item>高頻音增強</item>
+        <item>混合音增強</item>
+        <item>預設1</item>
+        <item>預設2</item>
+    </string-array>
+
 </resources>
