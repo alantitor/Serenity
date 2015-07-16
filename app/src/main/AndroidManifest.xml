@@ -54,21 +54,24 @@
         </activity>
         <activity
             android:name=".activities.BandSettingActivity"
-            android:label="@string/title_activity_band_setting" >
+            android:label="@string/title_activity_band_setting"
+            android:windowSoftInputMode="stateHidden">
         </activity>
 
         <service android:name=".servicemanager.SoundService" />
 
         <activity
             android:name=".activities.PureToneTestActivity"
-            android:label="@string/title_activity_pure_tone_test" >
+            android:label="@string/title_activity_pure_tone_test"
+            android:windowSoftInputMode="stateHidden">
         </activity>
 
         <service android:name=".servicemanager.PureToneTest" />
 
         <activity
             android:name=".activities.AudiogramTestActivity"
-            android:label="@string/title_activity_audiogram_test" >
+            android:label="@string/title_activity_audiogram_test"
+            android:windowSoftInputMode="stateHidden">
         </activity>
     </application>
 
