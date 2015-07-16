@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import ntou.cs.lab505.serenity.R;
 import ntou.cs.lab505.serenity.database.BandSettingAdapter;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
+import ntou.cs.lab505.serenity.system.HearingAidParameters;
 
 import static ntou.cs.lab505.serenity.R.layout.view_bandgain;
 
@@ -28,7 +32,8 @@ import static ntou.cs.lab505.serenity.R.layout.view_bandgain;
 public class BandSettingActivity extends Activity {
 
     private int channelNumber;
-
+    Spinner modeSpinner;
+    private boolean spinnerFirst = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +42,57 @@ public class BandSettingActivity extends Activity {
 
         LinearLayout rightControlLayout = (LinearLayout) findViewById(R.id.control_right_activity_band_setting);
         TextView leftControlTV = (TextView) findViewById(R.id.controltitle_left_activity_band_setting);
+
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.mode_array, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        modeSpinner = (Spinner) findViewById(R.id.spinner_activity_band_setting);
+        modeSpinner.setAdapter(spinnerAdapter);
+
+
+        modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (spinnerFirst == false) {
+                    spinnerFirst = true;
+                    return ;
+                }
+
+                switch (i) {
+                    case 0:
+                        loadData();
+                        break;
+                    case 1:
+                        loadData(HearingAidParameters.BAND_LOWGAIN_L, HearingAidParameters.BAND_LOWGAIN_R);
+                        break;
+                    case 2:
+                        loadData(HearingAidParameters.BAND_HIGHGAIN_L, HearingAidParameters.BAND_HIGHGAIN_R);
+                        break;
+                    case 3:
+                        loadData(HearingAidParameters.BAND_MIXGAIN_L, HearingAidParameters.BAND_MIXGAIN_R);
+                        break;
+                    case 4:
+                        loadData(HearingAidParameters.BAND_DEFAULTGAIN1_L, HearingAidParameters.BAND_DEFAULTGAIN1_R);
+                        break;
+                    case 5:
+                        loadData(HearingAidParameters.BAND_DEFAULTGAIN2_L, HearingAidParameters.BAND_DEFAULTGAIN2_R);
+                        break;
+                    default:
+                        loadData();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //
+            }
+        });
+
+
         // left channel border.
         SeekBar leftSeekbar = (SeekBar) findViewById(R.id.seekbar_left_activity_band_setting);
         // right channel border.
         SeekBar rightSeekBar = (SeekBar) findViewById(R.id.seekbar_right_activity_band_setting);
-
 
         // left channel listener
         leftSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -331,6 +382,61 @@ public class BandSettingActivity extends Activity {
             } else {
                 //Log.d("BandSettingActivity", "in onResume. wrong data in database.");
             }
+        }
+    }
+
+    private void loadData(BandGainSetUnit[] bandGainSetUnitsL, BandGainSetUnit[] bandGainSetUnitsR) {
+
+        // set seekBar progress.
+        SeekBar leftSeekBar = (SeekBar) findViewById(R.id.seekbar_left_activity_band_setting);
+        SeekBar rightSeekBar = (SeekBar) findViewById(R.id.seekbar_right_activity_band_setting);
+        leftSeekBar.setProgress(bandGainSetUnitsL.length);
+        rightSeekBar.setProgress(bandGainSetUnitsR.length);
+
+        TextView leftCountTV = (TextView) findViewById(R.id.count_left_activity_band_setting);
+        TextView rightCountTV = (TextView) findViewById(R.id.count_right_activity_band_setting);
+        leftCountTV.setText(bandGainSetUnitsL.length + "");  // integer to string.
+        rightCountTV.setText(bandGainSetUnitsR.length + "");
+
+        // load data to layout.
+        LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout leftBorder = (LinearLayout) findViewById(R.id.drawarea_left_activity_band_setting);
+        LinearLayout rightBorder = (LinearLayout) findViewById(R.id.drawarea_right_activity_band_setting);
+        leftBorder.removeAllViews();
+        rightBorder.removeAllViews();
+
+        for (int count = 0; count < bandGainSetUnitsL.length; count++) {
+            View view = layoutInflater.inflate(view_bandgain, null);
+            EditText ETLowBand = (EditText) view.findViewById(R.id.lowBand_view_bandgain);
+            EditText ETHighBand = (EditText) view.findViewById(R.id.highband_view_bandgain);
+            EditText ETGain40 = (EditText) view.findViewById(R.id.gain40_view_bandgain);
+            EditText ETGain60 = (EditText) view.findViewById(R.id.gain60_view_bandgain);
+            EditText ETGain80 = (EditText) view.findViewById(R.id.gain80_view_bandgain);
+
+            ETLowBand.setText(bandGainSetUnitsL[count].getLowBand() + "");
+            ETHighBand.setText(bandGainSetUnitsL[count].getHighBand() + "");
+            ETGain40.setText(bandGainSetUnitsL[count].getGain40() + "");
+            ETGain60.setText(bandGainSetUnitsL[count].getGain60() + "");
+            ETGain80.setText(bandGainSetUnitsL[count].getGain80() + "");
+
+            leftBorder.addView(view);
+        }
+
+        for (int count = 0; count < bandGainSetUnitsR.length; count++) {
+            View view = layoutInflater.inflate(view_bandgain, null);
+            EditText ETLowBand = (EditText) view.findViewById(R.id.lowBand_view_bandgain);
+            EditText ETHighBand = (EditText) view.findViewById(R.id.highband_view_bandgain);
+            EditText ETGain40 = (EditText) view.findViewById(R.id.gain40_view_bandgain);
+            EditText ETGain60 = (EditText) view.findViewById(R.id.gain60_view_bandgain);
+            EditText ETGain80 = (EditText) view.findViewById(R.id.gain80_view_bandgain);
+
+            ETLowBand.setText(bandGainSetUnitsL[count].getLowBand() + "");
+            ETHighBand.setText(bandGainSetUnitsL[count].getHighBand() + "");
+            ETGain40.setText(bandGainSetUnitsL[count].getGain40() + "");
+            ETGain60.setText(bandGainSetUnitsL[count].getGain60() + "");
+            ETGain80.setText(bandGainSetUnitsL[count].getGain80() + "");
+
+            rightBorder.addView(view);
         }
     }
 
