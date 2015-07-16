@@ -1,9 +1,12 @@
 package ntou.cs.lab505.serenity.servicemanager.thread;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 
 import java.util.ArrayList;
 
+import ntou.cs.lab505.serenity.sound.SoundTool;
 import ntou.cs.lab505.serenity.system.SystemParameters;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
@@ -146,6 +149,8 @@ public class SoundAllThread extends Thread {
                 continue;
             }
 
+            //Log.d("SoundAllThread", "in run. db: " + SoundTool.calculateDb(dataUnit.getLeftChannel()));
+
             // output sound data to speaker.
             soundOutputPool.write(dataUnit);
 
@@ -154,6 +159,7 @@ public class SoundAllThread extends Thread {
             timeStopNs = System.nanoTime() / 1000000;
 
             // output time information.
+            /*
             if (dataUnit != null) {
                 Log.d("SoundAllThread", "in run. exclude time: " + (timeStopNs - timeStartNs) + " " + (timeStopMs - timeStartMs));
                 Log.d("SoundAllThread", "in run. module time: " + "(" + (timeNs1 - timeStartNs) + " " + (timeMs1 - timeStartMs) + ") "
@@ -161,6 +167,7 @@ public class SoundAllThread extends Thread {
                                                                         + "(" + (timeNs3 - timeNs2) + " " + (timeMs3 - timeMs2) + ") "
                                                                         + "(" + (timeStopNs - timeNs3) + " " + (timeStopMs - timeMs3) + ")");
             }
+            */
         }
 
         Log.d("SoundAllThread", "in run. thread stop.");
