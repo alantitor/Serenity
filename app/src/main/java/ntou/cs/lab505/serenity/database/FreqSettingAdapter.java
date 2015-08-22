@@ -12,7 +12,7 @@ import ntou.cs.lab505.serenity.database.helper.TableContract;
 
 
 /**
- * Created by alan on 6/22/15.
+ * Control frequency setting database.
  */
 public class FreqSettingAdapter {
 

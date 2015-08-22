@@ -1,7 +1,7 @@
 package ntou.cs.lab505.serenity.system;
 
 /**
- * Created by alan on 2015/7/11.
+ * system sample rate.
  */
 public class SystemParameters {
 

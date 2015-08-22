@@ -18,7 +18,6 @@ public class SoundInputPool {
     ReadFile readFile;
     PureToneGeneration pureToneGeneration;
 
-
     /**
      *
      * @param sampleRate

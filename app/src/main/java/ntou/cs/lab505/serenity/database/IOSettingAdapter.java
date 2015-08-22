@@ -13,7 +13,7 @@ import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 
 
 /**
- * Created by alan on 6/22/15.
+ * Control IO setting database.
  */
 public class IOSettingAdapter {
 

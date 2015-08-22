@@ -21,7 +21,6 @@ public class SoundOutputPool {
     Speaker speaker;
     WriteFile writeFile;
 
-
     /**
      *
      * @param sampleRate

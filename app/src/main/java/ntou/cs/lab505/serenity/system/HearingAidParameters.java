@@ -3,7 +3,7 @@ package ntou.cs.lab505.serenity.system;
 import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 
 /**
- * Created by alan on 2015/7/15.
+ * Default hearing aid setting.
  */
 public class HearingAidParameters {
     // low gain

@@ -17,7 +17,7 @@ import ntou.cs.lab505.serenity.datastructure.SoundVectorUnit;
 
 
 /**
- * Created by alan on 6/12/15.
+ * This class contain channel process function, file process function and db calculate function.
  */
 public class SoundTool {
 

@@ -14,7 +14,7 @@ import ntou.cs.lab505.serenity.datastructure.BandGainSetUnit;
 
 
 /**
- * Created by alan on 6/22/15.
+ * Control band setting database.
  */
 public class BandSettingAdapter {
 

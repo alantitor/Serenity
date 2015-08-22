@@ -3,7 +3,7 @@ package ntou.cs.lab505.serenity.database.helper;
 import android.provider.BaseColumns;
 
 /**
- * Created by alan on 6/22/15.
+ * Define database system values.
  */
 public class TableContract implements BaseColumns {
 
