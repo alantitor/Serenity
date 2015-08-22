@@ -12,8 +12,11 @@ import android.widget.TextView;
 import ntou.cs.lab505.serenity.R;
 import ntou.cs.lab505.serenity.database.FreqSettingAdapter;
 
+/**
+ * Design layout of frequency setting layout.
+ */
 public class FreqSettingActivity extends Activity {
-
+    // get layout objects.
     TextView textView;
     SeekBar seekBar;
     int seekValue;
@@ -46,6 +49,9 @@ public class FreqSettingActivity extends Activity {
         });
     }
 
+    /**
+     * get setting value from database.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -57,8 +63,11 @@ public class FreqSettingActivity extends Activity {
         freqSettingAdapter.close();
     }
 
+    /**
+     * save setting value to databse.
+     */
     @Override
-    public void onPause () {
+    public void onPause() {
         super.onPause();
 
         FreqSettingAdapter freqSettingAdapter = new FreqSettingAdapter(this.getApplicationContext());
@@ -67,11 +76,20 @@ public class FreqSettingActivity extends Activity {
         freqSettingAdapter.close();
     }
 
-
+    /**
+     * convert value unit from seekbar to semitone.
+     * @param seekValue
+     * @return
+     */
     private int seekToSemi(int seekValue) {
         return seekValue - 12;
     }
 
+    /**
+     * convert value unit from semitone to seekbar.
+     * @param semitone
+     * @return
+     */
     private int semiToSeek(int semitone) {
         return semitone + 12;
     }

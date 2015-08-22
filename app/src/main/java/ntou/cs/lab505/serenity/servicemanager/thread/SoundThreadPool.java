@@ -29,15 +29,13 @@ public class SoundThreadPool extends Thread {
     // Sets the amount of time an idle thread waits before terminating
     int KEEP_ALIVE_TIME = 1;
     // Sets the Time Unit to seconds
-    TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.MILLISECONDS;
+    TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.NANOSECONDS;
     private final BlockingQueue<Runnable> mProcessWorkQueue = new LinkedBlockingQueue<Runnable>();
     // Creates a thread pool manager
     ThreadPoolExecutor mProcessThreadPool;
 
     // sound parameters..
-    private int sampleRate = SystemParameters.SAMPLERATE_HIGH;
-    LinkedBlockingQueue<SoundVectorUnit> soundDataQueue = new LinkedBlockingQueue<>();
-    LinkedBlockingQueue<SoundVectorUnit> soundDataQueue2 = new LinkedBlockingQueue<>();
+    private int sampleRate = SystemParameters.SAMPLERATE_VERYHIGH;
     // sound objects.
     SoundInputPool soundInputPool;
     FrequencyShift frequencyShift;
@@ -60,7 +58,7 @@ public class SoundThreadPool extends Thread {
         // sound parameter.
         soundInputPool = new SoundInputPool(SystemParameters.SAMPLERATE_LOW, 0);
         frequencyShift = new FrequencyShift(SystemParameters.SAMPLERATE_LOW, 1, 0, 0, 0);
-        bandGain = new BandGain(SystemParameters.SAMPLERATE_LOW, 200, 7999, 10, 10, 10);
+        bandGain = new BandGain(SystemParameters.SAMPLERATE_LOW, 200, (sampleRate / 2 - 1), 10, 10, 10);
         soundOutputPool = new SoundOutputPool(SystemParameters.SAMPLERATE_LOW, 1, 2, 0);
     }
 
@@ -75,7 +73,6 @@ public class SoundThreadPool extends Thread {
                                                     mProcessWorkQueue);
 
         soundInputPool = new SoundInputPool(sampleRate, ioSetUnit.getInputType());
-        //soundInputPool = new SoundInputPool(sampleRate, 4);
         frequencyShift = new FrequencyShift(sampleRate, 1, semitoneValue, 0, 0);  // do not set channel number as 2.
         bandGain = new BandGain(sampleRate, bandGainSetUnitArrayList);
         soundOutputPool = new SoundOutputPool(sampleRate, ioSetUnit.getChannelNumber(), 2, ioSetUnit.getOutputType());
@@ -98,20 +95,20 @@ public class SoundThreadPool extends Thread {
     public void run() {
         Log.d("SoundThreadPool", "in run. thread start.");
 
-        Runnable soundRecordRunnable = new SoundRecordRunnable();
-        Runnable soundProcessRunnable = new SoundProcessRunnable();
-        Runnable soundPlayRunnable = new SoundPlayRunnable();
+        Runnable soundRunnable = new SoundRunnable();
 
         while (threadState) {
-            mProcessThreadPool.execute(soundRecordRunnable);
-            mProcessThreadPool.execute(soundPlayRunnable);
+            mProcessThreadPool.execute(soundRunnable);
 
-            //Log.d("SoundThreadPool", "in run. queue size: " + soundDataQueue.size() + ", " + soundDataQueue2.size());
+            //Log.d("SoundThreadPool", "in run. work queue size: " + mProcessWorkQueue.size());
             Log.d("SoundThreadPool", "in run. exclude time: " + recordAvg + ", " + processAvg + ", " + playAvg);
+
+            if (mProcessWorkQueue.size() > NUMBER_OF_CORES) {
+                mProcessWorkQueue.clear();
+            }
         }
 
         mProcessThreadPool.shutdown();
-        //soundDataQueue.clear();
 
         Log.d("SoundThreadPool", "in run. thread stop.");
     }
@@ -119,94 +116,50 @@ public class SoundThreadPool extends Thread {
     /**
      *
      */
-    private class SoundRecordRunnable implements Runnable {
+    private class SoundRunnable implements Runnable {
 
-        double ns0, ns1;
+        double ns0, ns1, ns2, ns3;
         SoundVectorUnit dataUnit;
 
         @Override
         public void run() {
-            //Log.d("SoundThreadPool", "in SoundRecordRunnable run. in.");
+            Thread.currentThread().setPriority(MAX_PRIORITY);
+
             ns0 = System.nanoTime() / 1000000.0;
 
+            // get sound data.
             dataUnit = soundInputPool.read();
+
+            if (dataUnit == null) {
+                Thread.currentThread().interrupt();
+            }
+
+            ns1 = System.nanoTime() / 1000000.0;
+
+            // shift sound frequency.
+            dataUnit = frequencyShift.process(dataUnit);
+
+            if (dataUnit == null) {
+                Thread.currentThread().interrupt();
+            }
+
+            // cut sound and gain bands.
+            dataUnit = bandGain.process(dataUnit);
+
+            if (dataUnit == null) {
+                Thread.currentThread().interrupt();
+            }
+
+            ns2 = System.nanoTime() / 1000000.0;
+
+            // output sound data.
             soundOutputPool.write(dataUnit);
 
-            if (dataUnit != null) {
-                soundDataQueue2.add(dataUnit);
-            }
+            ns3 = System.nanoTime() / 1000000.0;
 
-            ns1 = System.nanoTime() / 1000000.0;
             recordAvg = (recordAvg + (ns1 - ns0)) / 2;
-        }
-    }
-
-    /**
-     *
-     */
-    private class SoundProcessRunnable implements Runnable {
-
-        double ns0, ns1;
-        SoundVectorUnit dataUnit;
-
-        @Override
-        public void run() {
-            //Log.d("SoundThreadPool", "in SoundProcessRunnable run. in.");
-            ns0 = System.nanoTime() / 1000000.0;
-
-            //Log.d("debug", "speaker size: " + getSpeakerBufferSize(sampleRate, 1));
-
-            if (soundDataQueue.size() > 0) {
-                dataUnit = soundDataQueue.poll();
-
-                //if (dataUnit != null) {
-                    //dataUnit = frequencyShift.process(dataUnit);
-
-
-                    soundDataQueue2.add(dataUnit);
-                //}
-            } else {
-                //Log.d("SoundThreadPool", "soundDataQueue no data.");
-            }
-
-            ns1 = System.nanoTime() / 1000000.0;
-            processAvg = (processAvg + (ns1 - ns0)) / 2;
-        }
-    }
-
-    /**
-     *
-     */
-    private class SoundPlayRunnable implements Runnable {
-
-        double ns0, ns1;
-        SoundVectorUnit dataUnit;
-
-        @Override
-        public void run() {
-            //Log.d("SoundThreadPool", "in SoundPlayRunnable run. in.");
-            ns0 = System.nanoTime() / 1000000.0;
-
-            if (soundDataQueue2.size() > 0) {
-                dataUnit = soundDataQueue2.poll();
-
-                if (dataUnit != null) {
-                    soundOutputPool.write(dataUnit);
-                }
-            } else {
-                //Log.d("SoundThreadPool", "soundDataQueue2 no data.");
-            }
-
-            ns1 = System.nanoTime() / 1000000.0;
-            playAvg = (playAvg + (ns1 - ns0)) / 2;
-        }
-    }
-
-    private class testRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            Log.d("SoundThreadPool", "run test.");
+            processAvg = (processAvg + (ns2 - ns1)) / 2;
+            playAvg = (playAvg + (ns3 - ns2)) / 2;
         }
     }
 }

@@ -10,6 +10,9 @@ import android.view.View;
 
 import ntou.cs.lab505.serenity.R;
 
+/**
+ * Design layout of setting layout.
+ */
 public class SettingActivity extends Activity {
 
     @Override

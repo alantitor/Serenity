@@ -73,7 +73,7 @@ public class IIR {
 
     public IIR(int FilterOrder, int sampleRate, double Lcutoff, double Ucutoff)
     {
-        Log.d("IIR", "in IIR. IIR filter range: " + Lcutoff + " to " + Ucutoff);
+        //Log.d("IIR", "in IIR. IIR filter range: " + Lcutoff + " to " + Ucutoff);
 
         this.n = FilterOrder;
         Lcutoff = Lcutoff / (sampleRate / 2);
@@ -86,15 +86,15 @@ public class IIR {
         band_coefficient_b = Num;
         band_coefficient_a = getDen();
 
-        Log.d("IIR", "in IIR. parameter a: ");
-        for(int i=0;i<band_coefficient_a.length;i++) {
-            Log.d("IIR", "in IIR. parameter a = " + Double.toString(band_coefficient_a[i]));
-        }
+        //Log.d("IIR", "in IIR. parameter a: ");
+        //for(int i=0;i<band_coefficient_a.length;i++) {
+        //    Log.d("IIR", "in IIR. parameter a = " + Double.toString(band_coefficient_a[i]));
+        //}
 
-        Log.d("IIR", "in IIR. parameter b: ");
-        for(int i=0;i<2*FilterOrder+1;i++) {
-            Log.d("IIR", "in IIR. parameter b = " + Double.toString(band_coefficient_b[i]));
-        }
+        //Log.d("IIR", "in IIR. parameter b: ");
+        //for(int i=0;i<2*FilterOrder+1;i++) {
+        //    Log.d("IIR", "in IIR. parameter b = " + Double.toString(band_coefficient_b[i]));
+        //}
 
         x = new double[band_coefficient_b.length-1];
         y = new double[band_coefficient_a.length];

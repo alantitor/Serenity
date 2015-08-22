@@ -22,13 +22,14 @@ import ntou.cs.lab505.serenity.servicemanager.SoundService;
 import ntou.cs.lab505.serenity.stream.device.Microphone;
 import ntou.cs.lab505.serenity.stream.device.Speaker;
 
+
+/**
+ * Design layout of service control layout.
+ */
 public class ServiceActivity extends Activity {
 
-    //boolean serviceState = false;  // denote is start service or not. it doesn't denote SoundService object's work state.
-    boolean boundState = false;  // denote service bind state.
-    // service object.
-    private SoundService soundService;
-
+    boolean boundState = false; // denote service bind state.
+    private SoundService soundService; // service object.
     ImageView controlButton;
 
 
@@ -36,11 +37,8 @@ public class ServiceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
-        // allow volume buttons.
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        // get object.
-        controlButton = (ImageView) findViewById(R.id.servicecontrol_activity_service);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC); // enable system volume buttons.
+        controlButton = (ImageView) findViewById(R.id.servicecontrol_activity_service); // get layout object.
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -84,13 +82,11 @@ public class ServiceActivity extends Activity {
     }
 
     public void buttonService(View view) {
-
         // check data state.
         if (checkServiceState() == false) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             TextView message = new TextView(this);
             message.setText("請先設定助聽器參數");
-            //message.setGravity(Gravity.CENTER);
             builder.setView(message);
             builder.setPositiveButton("OK", null);
             AlertDialog dialong = builder.show();

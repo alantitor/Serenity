@@ -13,6 +13,9 @@ import ntou.cs.lab505.serenity.R;
 import ntou.cs.lab505.serenity.database.IOSettingAdapter;
 import ntou.cs.lab505.serenity.datastructure.IOSetUnit;
 
+/**
+ * Design layout of io setting activity.
+ */
 public class IOSettingActivity extends Activity {
 
     RadioGroup RGChannel;
@@ -30,6 +33,9 @@ public class IOSettingActivity extends Activity {
         RGOutput = (RadioGroup) findViewById(R.id.rg_output_activity_io_setting);
     }
 
+    /**
+     * get data from database.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -108,6 +114,9 @@ public class IOSettingActivity extends Activity {
         }
     }
 
+    /**
+     *  save data to database.
+     */
     @Override
     public void onPause() {
         super.onPause();

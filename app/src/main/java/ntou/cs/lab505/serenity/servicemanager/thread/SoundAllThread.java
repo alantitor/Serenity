@@ -99,7 +99,7 @@ public class SoundAllThread extends Thread {
      * process sound.
      */
     public void run() {
-        Log.d("SoundAllThread", "in run. thread start.");
+        //Log.d("SoundAllThread", "in run. thread start.");
 
         // set thread priority.
         this.setPriority(MAX_PRIORITY);
@@ -107,6 +107,7 @@ public class SoundAllThread extends Thread {
         // record time.
         long timeStartMs, timeMs1, timeMs2, timeMs3, timeStopMs;
         double timeStartNs, timeNs1, timeNs2, timeNs3, timeStopNs;
+        double avg1 = 0, avg2 = 0, avg3 = 0, avg4 = 0;
 
         while(threadState) {
             // record start process time. record microphone start read time.
@@ -149,8 +150,6 @@ public class SoundAllThread extends Thread {
                 continue;
             }
 
-            //Log.d("SoundAllThread", "in run. db: " + SoundTool.calculateDb(dataUnit.getLeftChannel()));
-
             // output sound data to speaker.
             soundOutputPool.write(dataUnit);
 
@@ -168,8 +167,19 @@ public class SoundAllThread extends Thread {
                                                                         + "(" + (timeStopNs - timeNs3) + " " + (timeStopMs - timeMs3) + ")");
             }
             */
+            if (dataUnit != null) {
+                Log.d("SoundAllThread", "in run. exclude time: " + (avg1 +avg2 + avg3 + avg4));
+                avg1 = ((timeNs1 - timeStartNs) + avg1) / 2;
+                avg2 = ((timeNs2 - timeNs1) + avg2) / 2;
+                avg3 = ((timeNs3 - timeNs2) + avg3) / 2;
+                avg4 = ((timeStopNs - timeNs3) + avg4) / 2;
+                Log.d("SoundAllThread", "in run. module time: " + "(" + avg1 + ") "
+                                                                + "(" + avg2 + ") "
+                                                                + "(" + avg3 + ") "
+                                                                + "(" + avg4 + ")");
+            }
         }
 
-        Log.d("SoundAllThread", "in run. thread stop.");
+        //Log.d("SoundAllThread", "in run. thread stop.");
     }
 }

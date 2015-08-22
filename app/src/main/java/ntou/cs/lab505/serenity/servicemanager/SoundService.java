@@ -30,7 +30,9 @@ public class SoundService extends Service {
     int semitoneValue;
     ArrayList<BandGainSetUnit> bandGainSetUnitArrayList;
     // sound process threads object.
-    SoundAllThread soundThread;
+    //SoundAllThread soundAllThread;
+    SoundThreadPool soundThreadPool;
+
 
     public class SoundServiceBinder extends Binder {
         public SoundService getService() {
@@ -90,17 +92,21 @@ public class SoundService extends Service {
         bandSettingAdapter.close();
 
         // initial sound process object.
-        soundThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
-        soundThread.setPriority(Thread.MAX_PRIORITY);
+        //soundAllThread = new SoundAllThread(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        //soundAllThread.setPriority(Thread.MAX_PRIORITY);
+        soundThreadPool = new SoundThreadPool(sampleRate, ioSetUnit, semitoneValue, bandGainSetUnitArrayList);
+        soundThreadPool.setPriority(Thread.MAX_PRIORITY);
 
         serviceState = true;
-        soundThread.threadStart();
+        //soundAllThread.threadStart();
+        soundThreadPool.threadStart();
     }
 
     public void serviceStop() {
         //Log.d("SoundService", "in serviceStop. success.");
         serviceState = false;
-        soundThread.threadStop();
+        //soundAllThread.threadStop();
+        soundThreadPool.threadStop();
     }
 
     public boolean getServiceState() {

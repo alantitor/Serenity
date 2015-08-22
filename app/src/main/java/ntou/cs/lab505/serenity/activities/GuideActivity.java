@@ -8,6 +8,9 @@ import android.view.MenuItem;
 
 import ntou.cs.lab505.serenity.R;
 
+/**
+ * Design layout of guide activity.
+ */
 public class GuideActivity extends Activity {
 
     @Override

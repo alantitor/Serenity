@@ -17,6 +17,9 @@ import ntou.cs.lab505.serenity.R;
 import ntou.cs.lab505.serenity.servicemanager.PureToneTest;
 import ntou.cs.lab505.serenity.servicemanager.PureToneTest.PureToneTestBinder;
 
+/**
+ * Desgin layout of pure tone test activity.
+ */
 public class PureToneTestActivity extends Activity {
 
     EditText ETFreq;
@@ -140,6 +143,7 @@ public class PureToneTestActivity extends Activity {
         Log.d("PureToneTestActivity", "in buttonTest. valueOutput = " + valueOutput);
         */
 
+        // start test service.
         if (boundState) {
             pureToneTest.initParameters(valueFreq, valueDb, valueHarm, valueSec, valueBcLow, valueBcHigh, valueSemitone, valueGain, valueChannel, valueOutput);
             pureToneTest.runTest();

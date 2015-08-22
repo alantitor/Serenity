@@ -28,7 +28,9 @@ import ntou.cs.lab505.serenity.system.HearingAidParameters;
 
 import static ntou.cs.lab505.serenity.R.layout.view_bandgain;
 
-
+/**
+ * Design layout of band setting activity.
+ */
 public class BandSettingActivity extends Activity {
 
     private int channelNumber;
@@ -43,11 +45,11 @@ public class BandSettingActivity extends Activity {
         LinearLayout rightControlLayout = (LinearLayout) findViewById(R.id.control_right_activity_band_setting);
         TextView leftControlTV = (TextView) findViewById(R.id.controltitle_left_activity_band_setting);
 
+        // create drop down list.
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.mode_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modeSpinner = (Spinner) findViewById(R.id.spinner_activity_band_setting);
         modeSpinner.setAdapter(spinnerAdapter);
-
 
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -166,7 +168,7 @@ public class BandSettingActivity extends Activity {
     }
 
     /**
-     *
+     * save data to database.
      */
     @Override
     public void onResume() {
@@ -176,17 +178,15 @@ public class BandSettingActivity extends Activity {
     }
 
     /**
-     *
+     * get data from database.
      */
     @Override
     public void onPause() {
-
+        // get layout objects.
         LinearLayout leftRootLayout = (LinearLayout) findViewById(R.id.drawarea_left_activity_band_setting);
         LinearLayout rightRootLayout = (LinearLayout) findViewById(R.id.drawarea_right_activity_band_setting);
-
         View v;
         EditText lowBand, highBand, gain40, gain60, gain80;
-
         int leftItemCount = leftRootLayout.getChildCount();
         int rightItemCount = rightRootLayout.getChildCount();
         //Log.d("BandSettingActivity", "in onPause. left item count: " + leftItemCount);
@@ -239,7 +239,6 @@ public class BandSettingActivity extends Activity {
             //Log.d("BandSettingActivity", "in onPause. gain40: " + gain40.getText().toString());
             //Log.d("BandSettingActivity", "in onPause. gain60: " + gain60.getText().toString());
             //Log.d("BandSettingActivity", "in onPause. gain80: " + gain80.getText().toString());
-
 
             // generate object to save values.
             bandGainSetUnit = new  BandGainSetUnit(0,
@@ -313,7 +312,6 @@ public class BandSettingActivity extends Activity {
         ArrayList<BandGainSetUnit> bandGainSetUnitArrayList = bandSettingAdapter.getData();
         bandSettingAdapter.close();
 
-
         // check band number.
         int leftItemCount = 0;
         int rightItemCount = 0;
@@ -339,14 +337,12 @@ public class BandSettingActivity extends Activity {
         leftCountTV.setText(leftItemCount + "");  // integer to string.
         rightCountTV.setText(rightItemCount + "");
 
-
         // load data to layout.
         LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout leftBorder = (LinearLayout) findViewById(R.id.drawarea_left_activity_band_setting);
         LinearLayout rightBorder = (LinearLayout) findViewById(R.id.drawarea_right_activity_band_setting);
         leftBorder.removeAllViews();
         rightBorder.removeAllViews();
-
 
         for (int count = 0; count < bandGainSetUnitArrayList.size(); count++) {
             if (bandGainSetUnitArrayList.get(count).getLr() == 0) {
@@ -386,7 +382,6 @@ public class BandSettingActivity extends Activity {
     }
 
     private void loadData(BandGainSetUnit[] bandGainSetUnitsL, BandGainSetUnit[] bandGainSetUnitsR) {
-
         // set seekBar progress.
         SeekBar leftSeekBar = (SeekBar) findViewById(R.id.seekbar_left_activity_band_setting);
         SeekBar rightSeekBar = (SeekBar) findViewById(R.id.seekbar_right_activity_band_setting);

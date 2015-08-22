@@ -15,29 +15,33 @@ import java.util.List;
 import ntou.cs.lab505.serenity.R;
 import ntou.cs.lab505.serenity.database.helper.DBHelper;
 
+/**
+ *
+ */
 public class DatabaseActivity extends Activity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
 
-        String data = showDatabase();
+        String data = showDatabase(); // get database content.
 
-        TextView tv = (TextView) findViewById(R.id.drawarea_activity_database);
-        tv.setText(data);
+        TextView tv = (TextView) findViewById(R.id.drawarea_activity_database); // get layout object.
+        tv.setText(data);  // show data on layout.
     }
 
     private String showDatabase() {
         String data = "";
         String tableName = "";
 
+        // open database object.
         DBHelper mDbHelper = new DBHelper(this.getApplicationContext());
         SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
 
-        Cursor cTable = mDb.rawQuery("SELECT NAME FROM sqlite_master WHERE TYPE='table'", null);
+        Cursor cTable = mDb.rawQuery("SELECT NAME FROM sqlite_master WHERE TYPE='table'", null);  // get all table objects.
 
+        // trace each tables.
         if (cTable.moveToFirst()) {
             while (!cTable.isAfterLast()) {
                 // table name
@@ -75,7 +79,6 @@ public class DatabaseActivity extends Activity {
                 cTable.moveToNext();
             }
         }
-
 
         return data;
     }

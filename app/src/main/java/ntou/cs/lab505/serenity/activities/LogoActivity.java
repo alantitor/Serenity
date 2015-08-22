@@ -7,7 +7,9 @@ import android.view.View;
 
 import ntou.cs.lab505.serenity.R;
 
-
+/**
+ * Design the layout of Logo Activity.
+ */
 public class LogoActivity extends Activity {
 
     @Override
